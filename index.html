@@ -5,257 +5,253 @@
 <title>Cotizador Petrocheck</title>
 
 <style>
-
-/* ===== PALETA PROFESIONAL ===== */
 :root{
-  --primary:#0b1f3a;
-  --secondary:#123d6b;
-  --accent:#00a86b;
-  --light:#f5f7fa;
-  --card:#ffffff;
-  --text:#1e293b;
+  --negro:#111;
+  --gris:#f5f5f5;
+  --naranja:#ff6a00;
 }
 
-/* ===== BASE ===== */
 body{
   margin:0;
   font-family:'Segoe UI',sans-serif;
-  background:var(--light);
-  color:var(--text);
+  background:var(--gris);
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
 header{
-  background:linear-gradient(120deg,var(--primary),var(--secondary));
-  color:white;
-  padding:40px 20px;
+  background:var(--negro);
   text-align:center;
-  box-shadow:0 4px 15px rgba(0,0,0,0.2);
+  padding:25px;
 }
 
-header h1{
-  margin:0;
-  font-size:28px;
-  letter-spacing:1px;
+.logo{
+  width:180px;
 }
 
-header p{
-  opacity:0.8;
-}
-
-/* ===== CONTENEDOR ===== */
+/* CONTENEDOR */
 .container{
   max-width:1100px;
   margin:auto;
-  padding:30px 20px;
+  padding:20px;
 }
 
-/* ===== TITULOS ===== */
-h3{
-  margin-top:30px;
-  font-weight:600;
-}
+/* PASOS */
+.step{display:none;}
+.active{display:block;}
 
-/* ===== GRID SERVICIOS ===== */
+/* GRID */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:18px;
+  gap:15px;
 }
 
-/* ===== TARJETAS ===== */
+/* TARJETAS */
 .card{
-  background:var(--card);
-  border-radius:14px;
-  padding:18px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.08);
-  transition:all 0.25s ease;
-  border:1px solid #e5e7eb;
-  position:relative;
-}
-
-.card:hover{
-  transform:translateY(-5px);
-  box-shadow:0 10px 25px rgba(0,0,0,0.12);
-}
-
-.card input{
-  transform:scale(1.2);
-  margin-right:8px;
-}
-
-.card b{
-  display:block;
-  margin-bottom:5px;
-}
-
-/* ===== PRECIOS ===== */
-.precios{
-  font-size:13px;
-  color:#64748b;
-}
-
-.precios span{
-  display:block;
-}
-
-/* ===== SELECT ===== */
-select{
-  width:100%;
-  padding:12px;
+  background:white;
+  padding:15px;
   border-radius:10px;
-  border:1px solid #d1d5db;
-  margin-top:10px;
-  font-size:15px;
+  border-left:5px solid var(--naranja);
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* ===== BOTONES ===== */
+/* PRECIOS */
+.tachado{
+  text-decoration:line-through;
+  color:gray;
+}
+
+.feria{
+  color:var(--naranja);
+  font-weight:bold;
+}
+
+/* FORM */
+input, select{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
+
+/* BOTONES */
 button{
   width:100%;
-  padding:14px;
+  padding:12px;
+  margin-top:15px;
+  background:var(--naranja);
+  color:white;
   border:none;
-  border-radius:10px;
+  border-radius:8px;
   font-size:16px;
-  font-weight:600;
-  margin-top:12px;
   cursor:pointer;
-  transition:0.3s;
 }
 
-.btn-primary{
-  background:var(--primary);
-  color:white;
+button:hover{
+  background:#e65c00;
 }
 
-.btn-primary:hover{
-  background:#08182d;
+/* NOTA */
+.nota{
+  background:#fff3cd;
+  padding:10px;
+  border-radius:8px;
+  font-size:13px;
+  margin-top:10px;
 }
 
-.btn-whatsapp{
-  background:#25D366;
-  color:white;
-}
-
-.btn-whatsapp:hover{
-  background:#1ebe5d;
-}
-
-/* ===== RESULTADO ===== */
+/* RESULTADO */
 .resultado{
-  margin-top:25px;
   background:white;
-  padding:25px;
-  border-radius:14px;
-  box-shadow:0 6px 20px rgba(0,0,0,0.1);
-}
-
-.resultado h4{
-  margin-top:0;
+  padding:20px;
+  border-radius:10px;
 }
 
 .total{
-  font-size:24px;
+  font-size:22px;
+  color:var(--naranja);
   font-weight:bold;
-  color:var(--accent);
-  margin-top:10px;
 }
-
-hr{
-  margin:15px 0;
-}
-
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>Cotizador Petrocheck</h1>
-<p>Servicios técnicos certificados para estaciones de servicio</p>
+<img src="https://petrocheck.com.ec/wp-content/uploads/2023/07/logo-petrocheck.png" class="logo">
 </header>
 
 <div class="container">
 
-<h3>Selecciona los servicios:</h3>
+<!-- PASO 1 -->
+<div class="step active" id="step1">
+<h3>1. Selecciona los servicios</h3>
 
-<div class="grid" id="servicios">
+<div class="grid">
 
-<div class="card"><label><input type="checkbox" value="102|120|150"><b>Hermeticidad en tanques</b></label><div class="precios"><span>Normal: $150</span><span>MasGas: $120</span><span>Feria: $102</span></div></div>
+<div class="card"><input type="checkbox" value="102|120|150"> Hermeticidad en tanques<br><span class="tachado">$150</span> | <span class="tachado">$120</span> | <span class="feria">$102</span></div>
 
-<div class="card"><label><input type="checkbox" value="63.75|75|90"><b>Hermeticidad en líneas</b></label><div class="precios"><span>Normal: $90</span><span>MasGas: $75</span><span>Feria: $63.75</span></div></div>
+<div class="card"><input type="checkbox" value="63.75|75|90"> Hermeticidad en líneas<br><span class="tachado">$90</span> | <span class="tachado">$75</span> | <span class="feria">$63.75</span></div>
 
-<div class="card"><label><input type="checkbox" value="59.5|70|85"><b>Parámetros dimensionales</b></label><div class="precios"><span>Normal: $85</span><span>MasGas: $70</span><span>Feria: $59.5</span></div></div>
+<div class="card"><input type="checkbox" value="59.5|70|85"> Parámetros dimensionales<br><span class="tachado">$85</span> | <span class="tachado">$70</span> | <span class="feria">$59.5</span></div>
 
-<div class="card"><label><input type="checkbox" value="382.5|450|460"><b>Limpieza de tanque</b></label><div class="precios"><span>Normal: $460</span><span>MasGas: $450</span><span>Feria: $382.5</span></div></div>
+<div class="card"><input type="checkbox" value="59.5|70|85"> Inspección técnica<br><span class="tachado">$85</span> | <span class="tachado">$70</span> | <span class="feria">$59.5</span></div>
+
+<div class="card"><input type="checkbox" value="382.5|450|460"> Limpieza de tanque<br><span class="tachado">$460</span> | <span class="tachado">$450</span> | <span class="feria">$382.5</span></div>
+
+<div class="card"><input type="checkbox" value="297.5|350|380"> Capacidad 1k-4k gal<br><span class="tachado">$380</span> | <span class="tachado">$350</span> | <span class="feria">$297.5</span></div>
+
+<div class="card"><input type="checkbox" value="408|480|500"> Calibración 5k-12k gal<br><span class="tachado">$500</span> | <span class="tachado">$480</span> | <span class="feria">$408</span></div>
+
+<div class="card"><input type="checkbox" value="365.5|430|490"> Calibración mayor<br><span class="tachado">$490</span> | <span class="tachado">$430</span> | <span class="feria">$365.5</span></div>
+
+<div class="card"><input type="checkbox" value="153|180|200"> Calibración pequeña<br><span class="tachado">$200</span> | <span class="tachado">$180</span> | <span class="feria">$153</span></div>
+
+<div class="card"><input type="checkbox" value="127.5|150|190"> Calibración adicional<br><span class="tachado">$190</span> | <span class="tachado">$150</span> | <span class="feria">$127.5</span></div>
+
+<div class="card"><input type="checkbox" value="297.5|350|370"> Memoria técnica<br><span class="tachado">$370</span> | <span class="tachado">$350</span> | <span class="feria">$297.5</span></div>
+
+<div class="card"><input type="checkbox" value="63.75|75|90"> Certificación surtidores<br><span class="tachado">$90</span> | <span class="tachado">$75</span> | <span class="feria">$63.75</span></div>
+
+<div class="card"><input type="checkbox" value="382.5|450|465"> Cumplimiento INEN<br><span class="tachado">$465</span> | <span class="tachado">$450</span> | <span class="feria">$382.5</span></div>
 
 </div>
 
-<h3>Ubicación:</h3>
+<button onclick="next(2)">Siguiente</button>
+</div>
+
+<!-- PASO 2 -->
+<div class="step" id="step2">
+<h3>2. Ubicación</h3>
+
+<div class="nota">
+⚠️ <b>Importante:</b> El costo logístico es por día y puede variar según la duración del servicio y la ubicación.
+</div>
 
 <select id="ciudad">
-<option value="pichincha">Quito / Pichincha</option>
-<option value="ambato">Ambato</option>
-<option value="guayaquil">Guayaquil</option>
-<option value="cuenca">Cuenca</option>
+<option value="pichincha">Pichincha</option>
+<option value="tungurahua">Tungurahua</option>
+<option value="guayas">Guayas</option>
+<option value="azuay">Azuay</option>
 <option value="amazonia">Amazonía</option>
 </select>
 
-<button class="btn-primary" onclick="calcular()">Calcular Cotización</button>
+<button onclick="next(3)">Siguiente</button>
+</div>
 
+<!-- PASO 3 -->
+<div class="step" id="step3">
+<h3>3. Datos del cliente</h3>
+
+<input id="razon" placeholder="Razón Social">
+<input id="ruc" placeholder="RUC">
+<input id="contacto" placeholder="Persona de contacto">
+<input id="telefono" placeholder="Teléfono">
+<input id="correo" placeholder="Correo electrónico">
+<input id="fecha" type="date">
+
+<button onclick="calcular()">Finalizar</button>
+</div>
+
+<!-- RESULTADO -->
+<div class="step" id="step4">
+<h3>Resumen</h3>
 <div class="resultado" id="resultado"></div>
-
-<button class="btn-whatsapp" onclick="enviarWhatsApp()">Enviar por WhatsApp</button>
+<button onclick="whatsapp()">Enviar por WhatsApp</button>
+</div>
 
 </div>
 
 <script>
 
-function obtenerLogistica(ciudad){
-if(ciudad=="pichincha") return 131;
-if(ciudad=="ambato") return 131;
-if(ciudad=="guayaquil") return 147;
-if(ciudad=="cuenca") return 131;
-if(ciudad=="amazonia") return 140;
+function next(n){
+document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
+document.getElementById("step"+n).classList.add("active");
+}
+
+function logistica(c){
+if(c=="pichincha") return 131;
+if(c=="tungurahua") return 131;
+if(c=="guayas") return 147;
+if(c=="azuay") return 131;
+if(c=="amazonia") return 140;
 }
 
 let mensaje="";
 
 function calcular(){
 
-let checks=document.querySelectorAll("#servicios input:checked");
+let checks=document.querySelectorAll("input[type=checkbox]:checked");
 
-let normal=0,masgas=0,feria=0;
+let total=0;
 
 checks.forEach(c=>{
 let d=c.value.split("|");
-feria+=parseFloat(d[0]);
-masgas+=parseFloat(d[1]);
-normal+=parseFloat(d[2]);
+total+=parseFloat(d[0]);
 });
 
 let ciudad=document.getElementById("ciudad").value;
-let logistica=obtenerLogistica(ciudad);
-let total=feria+logistica;
+let log=logistica(ciudad);
+let final=total+log;
 
-mensaje="COTIZACIÓN PETROCHECK%0A"+
-"Total Normal: $"+normal+"%0A"+
-"Total MasGas: $"+masgas+"%0A"+
-"Total Feria: $"+feria+"%0A"+
-"Logística: $"+logistica+"%0A"+
-"TOTAL FINAL: $"+total;
+mensaje=
+"COTIZACIÓN PETROCHECK%0A"+
+"Cliente: "+document.getElementById("razon").value+"%0A"+
+"Contacto: "+document.getElementById("contacto").value+"%0A"+
+"Teléfono: "+document.getElementById("telefono").value+"%0A"+
+"Total: $"+final;
 
 document.getElementById("resultado").innerHTML=
-"<h4>Resumen de Cotización</h4>"+
-"Normal: $"+normal+
-"<br>MasGas: $"+masgas+
-"<br><b>Feria: $"+feria+"</b>"+
-"<hr>Logística: $"+logistica+
-"<div class='total'>TOTAL: $"+total+"</div>";
+"Subtotal: $"+total+
+"<br>Logística: $"+log+
+"<div class='total'>TOTAL: $"+final+"</div>";
+
+next(4);
 }
 
-function enviarWhatsApp(){
-let numero="59399930098";
-window.open("https://wa.me/"+numero+"?text="+mensaje);
+function whatsapp(){
+window.open("https://wa.me/593XXXXXXXXX?text="+mensaje);
 }
 
 </script>
