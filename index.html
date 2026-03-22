@@ -155,22 +155,87 @@ Total: $<span id="total">0.00</span>
 <!-- PASO 2 -->
 <div class="step" id="step2">
 <h3>Ubicación</h3>
-
+```html
 <input id="ubicacion" list="ciudades" placeholder="Ej: Quito">
+
 <datalist id="ciudades">
+
+<!-- ZONA 1 -->
+<option value="Mejía">
+<option value="Cayambe">
 <option value="Quito">
-<option value="Guayaquil">
-<option value="Cuenca">
+<option value="Tabacundo">
+<option value="Santo Domingo">
+<option value="Otavalo">
+<option value="Pedro Vicente Maldonado">
+<option value="San Miguel de Urcuquí">
+
+<!-- ZONA 2 -->
+<option value="Chunchi">
 <option value="Ambato">
+<option value="Cumandá">
+<option value="Pangua">
 <option value="Latacunga">
 <option value="Riobamba">
+<option value="Pujilí">
+<option value="Pelileo">
+<option value="Bucay">
+<option value="El Corazón">
+<option value="Santiago de Píllaro">
+<option value="Salcedo">
+<option value="Tisaleo">
+<option value="Sigchos">
+<option value="Penipe">
+<option value="Cevallos">
+<option value="Baños">
+<option value="Quero">
+<option value="Saquisilí">
+<option value="Guaranda">
+
+<!-- ZONA 3 -->
+<option value="Mocache">
+<option value="Guayaquil">
+<option value="Balao">
+<option value="El Carmen">
+<option value="Babahoyo">
+<option value="Nobol">
+<option value="Portoviejo">
+<option value="Milagro">
+<option value="Jaramijó">
+<option value="Yaguachi">
+<option value="Montecristi">
+<option value="Palenque">
+<option value="Salitre">
+<option value="Santa Lucía">
+<option value="Urdaneta">
+<option value="Echeandía">
+<option value="Chillanes">
+
+<!-- ZONA 4 -->
+<option value="Santa Isabel">
+<option value="Calvas">
+<option value="Cañar">
 <option value="Loja">
-<option value="Machala">
-<option value="Esmeraldas">
-<option value="Santo Domingo">
-<option value="Ibarra">
-<option value="Tulcán">
+<option value="Gualaceo">
+<option value="Pucará">
+<option value="Nabón">
+<option value="Oña">
+<option value="Yacuambi">
+<option value="Paute">
+<option value="Catacocha">
+<option value="Pasaje">
+<option value="Portovelo">
+<option value="El Guabo">
+
+<!-- ZONA 5 -->
+<option value="Lago Agrio">
+<option value="Sucumbíos">
+<option value="Puyo">
+<option value="Loreto">
+<option value="Joya de los Sachas">
+
 </datalist>
+```
 
 <div class="botones">
 <button class="back" onclick="next(1)">Anterior</button>
@@ -288,7 +353,7 @@ ${lista.join("<br>") || "—"}<br><br>
 
 ${ubicacion ? `
 <b>Logística:</b> $${logistica}<br>
-<span style="font-size:12px;color:#6b7280;">* La logística es precio por día</span><br><br>
+<span style="font-size:12px;color:#6b7280;">* Pprecio por día</span><br><br>
 ` : ""}
 
 <b>Total normal:</b> $${totalNormal.toFixed(2)}<br>
@@ -337,7 +402,7 @@ doc.save("cotizacion.pdf");
 // WHATSAPP
 function whatsapp(){
 let texto = document.getElementById("resumenBox").innerText;
-window.open("https://wa.me/593XXXXXXXXX?text="+encodeURIComponent(texto));
+window.open("https://wa.me/593999300398?text="+encodeURIComponent(texto));
 }
 
 </script>
