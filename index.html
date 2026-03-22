@@ -27,10 +27,7 @@ header{
   padding:15px;
   text-align:center;
 }
-
-.logo{
-  height:45px;
-}
+.logo{ height:45px; }
 
 /* CONTENEDOR */
 .container{
@@ -57,17 +54,39 @@ header{
   border-radius:10px;
   border:1px solid #e5e7eb;
   transition:0.2s;
-  font-size:14px;
+  font-size:13.5px;
 }
-
-.card:hover{
-  border-color:var(--accent);
-}
+.card:hover{ border-color:var(--accent); }
+.card b{ display:block; margin-top:6px; }
 
 /* PRECIOS */
-.normal{ text-decoration:line-through; color:#999; font-size:12px;}
-.masgas{ text-decoration:line-through; color:#bbb; font-size:12px;}
-.feria{ color:var(--accent); font-weight:600;}
+.precios{
+  margin-top:10px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.tag{ font-size:12.5px; }
+
+.tag.normal{
+  text-decoration:line-through;
+  color:#9ca3af;
+}
+
+.tag.masgas{
+  text-decoration:line-through;
+  color:#6b7280;
+}
+
+/* DESTACADO */
+.tag.feria{
+  color:#fff;
+  background:var(--accent);
+  padding:4px 8px;
+  border-radius:6px;
+  font-weight:600;
+  width:max-content;
+}
 
 /* INPUT */
 input{
@@ -76,7 +95,6 @@ input{
   margin-top:8px;
   border-radius:6px;
   border:1px solid #d1d5db;
-  font-size:14px;
 }
 
 /* BOTONES */
@@ -85,16 +103,13 @@ input{
   gap:10px;
   margin-top:15px;
 }
-
 button{
   flex:1;
   padding:10px;
   border:none;
   border-radius:6px;
-  font-size:14px;
   cursor:pointer;
 }
-
 .next{ background:var(--accent); color:white;}
 .back{ background:#e5e7eb;}
 
@@ -107,20 +122,11 @@ button{
   border:1px solid #e5e7eb;
   padding:12px 16px;
   border-radius:10px;
-  font-size:14px;
   box-shadow:0 4px 12px rgba(0,0,0,0.1);
 }
-
 .total-box span{
   color:var(--accent);
   font-weight:bold;
-}
-
-/* ERROR */
-.error{
-  color:red;
-  font-size:12px;
-  margin-top:5px;
 }
 </style>
 </head>
@@ -128,7 +134,7 @@ button{
 <body>
 
 <header>
-<img src="https://media.licdn.com/dms/image/v2/C4E1BAQFVKNoTZG40BA/company-background_10000/company-background_10000/0/1584216937768/petrocheck_services_cover?e=2147483647&v=beta&t=YM3RmhVRBPo_t3g7CW_Vw2MFuBG1EyJMNpDCPyJ_k20" class="logo">
+<img src="https://petrocheck.com.ec/wp-content/uploads/2023/07/logo-petrocheck.png" class="logo">
 </header>
 
 <div class="total-box">
@@ -137,167 +143,21 @@ Total: $<span id="total">0</span>
 
 <div class="container">
 
-
 <!-- PASO 1 -->
 <div class="step active" id="step1">
 <h3>Servicios</h3>
 
-<div class="grid">
-
-<!-- CARD -->
-<div class="card">
-<input type="checkbox" value="102" onchange="total()">
-<b>PRUEBAS DE HERMETICIDAD EN TANQUES</b>
-
-<div class="precios">
-  <span class="tag normal">Normal: $150</span>
-  <span class="tag masgas">MasGas: $120</span>
-  <span class="tag feria">Feria: $102</span>
-</div>
-</div>
-
-<div class="card">
-<input type="checkbox" value="63.75" onchange="total()">
-<b>PRUEBAS DE HERMETICIDAD EN LÍNEAS</b>
-
-<div class="precios">
-  <span class="tag normal">Normal: $90</span>
-  <span class="tag masgas">MasGas: $75</span>
-  <span class="tag feria">Feria: $63.75</span>
-</div>
-</div>
-
-<div class="card">
-<input type="checkbox" value="59.5" onchange="total()">
-<b>PARÁMETROS DIMENSIONALES</b>
-
-<div class="precios">
-  <span class="tag normal">Normal: $85</span>
-  <span class="tag masgas">MasGas: $70</span>
-  <span class="tag feria">Feria: $59.5</span>
-</div>
-</div>
-
-<div class="card">
-<input type="checkbox" value="59.5" onchange="total()">
-<b>INSPECCIÓN TÉCNICA POR MEDICIÓN DE ESPESORES</b>
-
-<div class="precios">
-  <span class="tag normal">Normal: $85</span>
-  <span class="tag masgas">MasGas: $70</span>
-  <span class="tag feria">Feria: $59.5</span>
-</div>
-</div>
-
-<div class="card">
-<input type="checkbox" value="382.5" onchange="total()">
-<b>LIMPIEZA DE TANQUE DE 5 MIL A 12 MIL GALONES</b>
-
-<div class="precios">
-  <span class="tag normal">Normal: $460</span>
-  <span class="tag masgas">MasGas: $450</span>
-  <span class="tag feria">Feria: $382.5</span>
-</div>
-</div>
-
-<div class="card">
-<input type="checkbox" value="297.5" onchange="total()">
-<b>LIMPIEZA DE TANQUE DE 1 MIL A 4 MIL GALONES</b>
-
-<div class="precios">
-  <span class="tag normal">Normal: $380</span>
-  <span class="tag masgas">MasGas: $350</span>
-  <span class="tag feria">Feria: $297.5</span>
-</div>
-</div>
-
-<div class="card">
-<input type="checkbox" value="408" onchange="total()">
-<b>CALIBRACIÓN LIQUIDA 5 MIL A 12 MIL GALONES</b>
-
-<div class="precios">
-  <span class="tag normal">Normal: $500</span>
-  <span class="tag masgas">MasGas: $480</span>
-  <span class="tag feria">Feria: $408</span>
-</div>
-</div>
-
-<div class="card">
-<input type="checkbox" value="153" onchange="total()">
-<b>CALIBRACIÓN LIQUIDA 1 MIL A 4 MIL GALONES</b>
-
-<div class="precios">
-  <span class="tag normal">Normal: $200</span>
-  <span class="tag masgas">MasGas: $180</span>
-  <span class="tag feria">Feria: $153</span>
-</div>
-</div>
-
-<div class="card">
-<input type="checkbox" value="365.5" onchange="total()">
-<b>CALIBRACIÓN GEOMÉTRICA 5 MIL A 12 MIL</b>
-
-<div class="precios">
-  <span class="tag normal">Normal: $490</span>
-  <span class="tag masgas">MasGas: $430</span>
-  <span class="tag feria">Feria: $365.5</span>
-</div>
-</div>
-
-<div class="card">
-<input type="checkbox" value="127.5" onchange="total()">
-<b>CALIBRACIÓN GEOMÉTRICA 1 MIL A 4 MIL</b>
-
-<div class="precios">
-  <span class="tag normal">Normal: $190</span>
-  <span class="tag masgas">MasGas: $150</span>
-  <span class="tag feria">Feria: $127.5</span>
-</div>
-</div>
-
-<div class="card">
-<input type="checkbox" value="297.5" onchange="total()">
-<b>MEMORIA TÉCNICA</b>
-
-<div class="precios">
-  <span class="tag normal">Normal: $370</span>
-  <span class="tag masgas">MasGas: $350</span>
-  <span class="tag feria">Feria: $297.5</span>
-</div>
-</div>
-
-<div class="card">
-<input type="checkbox" value="63.75" onchange="total()">
-<b>CERTIFICACIÓN DE SURTIDORES NTE INEN 1781</b>
-
-<div class="precios">
-  <span class="tag normal">Normal: $90</span>
-  <span class="tag masgas">MasGas: $75</span>
-  <span class="tag feria">Feria: $63.75</span>
-</div>
-</div>
-
-<div class="card">
-<input type="checkbox" value="382.5" onchange="total()">
-<b>CUMPLIMIENTO NTE INEN 2251</b>
-  <div class="precios">
-  <span class="tag normal">Normal: $465</span>
-  <span class="tag masgas">MasGas: $450</span>
-  <span class="tag feria">Feria: $382.5</span>
-</div>
-</div>
-
-</div>
+<div class="grid" id="listaServicios"></div>
 
 <div class="botones">
-<button class="next" onclick="next(2)">Siguiente</button>
+<button class="next" onclick="validar()">Siguiente</button>
 </div>
 </div>
 
 <!-- PASO 2 -->
 <div class="step" id="step2">
 <h3>Ubicación</h3>
-<input id="ubicacion" placeholder="Ej: Quito, Ambato...">
+<input id="ubicacion" placeholder="Ej: Quito">
 
 <div class="botones">
 <button class="back" onclick="next(1)">Anterior</button>
@@ -308,12 +168,12 @@ Total: $<span id="total">0</span>
 <!-- PASO 3 -->
 <div class="step" id="step3">
 <h3>Datos del cliente</h3>
-
 <input id="razon" placeholder="Razón Social">
 <input id="ruc" placeholder="RUC">
 <input id="contacto" placeholder="Persona de contacto">
 <input id="telefono" placeholder="Teléfono">
 <input id="correo" placeholder="Correo">
+<input type="date">
 
 <div class="botones">
 <button class="back" onclick="next(2)">Anterior</button>
@@ -324,6 +184,37 @@ Total: $<span id="total">0</span>
 </div>
 
 <script>
+
+const servicios = [
+["PRUEBAS DE HERMETICIDAD EN TANQUES",102,120,150],
+["PRUEBAS DE HERMETICIDAD EN LÍNEAS",63.75,75,90],
+["PARÁMETROS DIMENSIONALES",59.5,70,85],
+["INSPECCIÓN TÉCNICA POR MEDICIÓN DE ESPESORES",59.5,70,85],
+["LIMPIEZA DE TANQUE CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES (INCLUYE CERTIFICADO DE LIMPIEZA)",382.5,450,460],
+["LIMPIEZA DE TANQUE CON CAPACIDAD DE 1 MIL HASTA 4 MIL GALONES (INCLUYE CERTIFICADO DE LIMPIEZA)",297.5,350,380],
+["CALIBRACIÓN LIQUIDA TANQUES CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",408,480,500],
+["CALIBRACIÓN LIQUIDA TANQUES CON CAPACIDAD DE 1 MIL HASTA 4 MIL GALONES (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",153,180,200],
+["CALIBRACIÓN GEOMETRICA TANQUES CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",365.5,430,490],
+["CALIBRACIÓN GEOMETRICA TANQUES CON CAPACIDAD DE 1 MIL HASTA 4 MIL HASTA (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",127.5,150,190],
+["MEMORIA TÉCNICA",297.5,350,370],
+["CERTIFICACIÓN DE SURTIDORES NTE INEN 1781",63.75,75,90],
+["CUMPLIMIENTO DE NORMAS DE SEGURIDAD NTE INEN 2251",382.5,450,465]
+];
+
+const contenedor = document.getElementById("listaServicios");
+
+servicios.forEach(s=>{
+contenedor.innerHTML += `
+<div class="card">
+<input type="checkbox" value="${s[1]}" onchange="total()">
+<b>${s[0]}</b>
+<div class="precios">
+<span class="tag normal">Precio normal: $${s[3]}</span>
+<span class="tag masgas">Precio cliente MasGas: $${s[2]}</span>
+<span class="tag feria">Precio feria: $${s[1]}</span>
+</div>
+</div>`;
+});
 
 function total(){
 let t=0;
@@ -338,10 +229,28 @@ document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
 document.getElementById("step"+n).classList.add("active");
 }
 
+function validar(){
+if(document.querySelectorAll("input:checked").length==0){
+alert("Selecciona al menos un servicio");
+return;
+}
+next(2);
+}
+
 function whatsapp(){
+
+let serviciosSel=[];
+document.querySelectorAll("input:checked").forEach(c=>{
+serviciosSel.push(c.parentElement.querySelector("b").innerText);
+});
+
 let total=document.getElementById("total").innerText;
-let msg="Cotización Petrocheck%0ATotal: $"+total;
-window.open("https://wa.me/593999300398?text="+msg);
+
+let msg="COTIZACIÓN PETROCHECK%0A%0A";
+msg+="Servicios:%0A"+serviciosSel.join("%0A")+"%0A%0A";
+msg+="TOTAL: $"+total;
+
+window.open("https://wa.me/593XXXXXXXXX?text="+encodeURIComponent(msg));
 }
 
 </script>
