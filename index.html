@@ -155,6 +155,16 @@ Total: $<span id="total">0</span>
 </div>
 
 <!-- PASO 2 -->
+  <div id="resumenBox" style="
+margin-top:20px;
+background:white;
+padding:15px;
+border-radius:10px;
+border:1px solid #e5e7eb;
+font-size:13px;
+line-height:1.5;
+"></div>
+  
 <div class="step" id="step2">
 <h3>Ubicación</h3>
 <input id="ubicacion" placeholder="Ej: Quito">
@@ -254,6 +264,84 @@ window.open("https://wa.me/593XXXXXXXXX?text="+encodeURIComponent(msg));
 }
 
 </script>
+<script>
 
+// LOGÍSTICA POR ZONA
+function calcularLogistica(ubicacion){
+ubicacion = ubicacion.toLowerCase();
+
+if(ubicacion.includes("quito") || ubicacion.includes("pichincha")) return 131;
+if(ubicacion.includes("ambato") || ubicacion.includes("tungurahua")) return 131;
+if(ubicacion.includes("guayaquil") || ubicacion.includes("guayas")) return 147;
+if(ubicacion.includes("cuenca") || ubicacion.includes("azuay")) return 131;
+
+return 140;
+}
+
+// RESUMEN DINÁMICO
+function actualizarResumen(){
+
+let totalFeria = 0;
+let totalMasgas = 0;
+let totalNormal = 0;
+
+let lista = [];
+
+document.querySelectorAll("input[type=checkbox]:checked").forEach(c=>{
+
+let card = c.parentElement;
+
+// obtener precios desde el texto
+let precios = card.querySelectorAll(".tag");
+
+let normal = parseFloat(precios[0].innerText.replace(/[^0-9.]/g,""));
+let masgas = parseFloat(precios[1].innerText.replace(/[^0-9.]/g,""));
+let feria = parseFloat(precios[2].innerText.replace(/[^0-9.]/g,""));
+
+let nombre = card.querySelector("b").innerText;
+
+lista.push(nombre);
+
+totalNormal += normal;
+totalMasgas += masgas;
+totalFeria += feria;
+
+});
+
+// LOGÍSTICA
+let ubicacion = document.getElementById("ubicacion")?.value || "";
+let logistica = calcularLogistica(ubicacion);
+
+totalNormal += logistica;
+totalMasgas += logistica;
+totalFeria += logistica;
+
+// MOSTRAR
+let resumen = `
+<h4>Resumen</h4>
+Servicios:<br>${lista.join("<br>")}<br><br>
+
+Logística: $${logistica}<br><br>
+
+<b>Total normal:</b> $${totalNormal}<br>
+<b>Total MasGas:</b> $${totalMasgas}<br>
+<b style="color:#f97316;">Total feria:</b> $${totalFeria}<br><br>
+
+<b>Ahorro:</b> $${(totalNormal - totalFeria).toFixed(2)}
+`;
+
+let cont = document.getElementById("resumenBox");
+if(cont){
+cont.innerHTML = resumen;
+}
+
+}
+
+// EVENTOS
+document.addEventListener("change", actualizarResumen);
+
+document.getElementById("ubicacion")?.addEventListener("input", actualizarResumen);
+
+</script>
 </body>
 </html>
