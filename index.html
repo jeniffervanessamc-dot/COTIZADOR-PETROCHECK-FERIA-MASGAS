@@ -3,151 +3,106 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Cotizador Petrocheck PRO</title>
+<title>Cotizador Petrocheck</title>
 
 <style>
 :root{
-  --negro:#0d0d0d;
+  --negro:#111;
   --gris:#f4f6f8;
   --naranja:#ff6a00;
-  --texto:#2c2c2c;
 }
 
 body{
   margin:0;
   font-family:'Segoe UI',sans-serif;
   background:var(--gris);
-  color:var(--texto);
 }
 
 /* HEADER */
 header{
-  background:linear-gradient(90deg,#0d0d0d,#1a1a1a);
-  padding:25px;
+  background:#111;
   text-align:center;
-  box-shadow:0 4px 15px rgba(0,0,0,0.2);
+  padding:20px;
 }
 
 .logo{
-  width:200px;
+  width:180px;
 }
 
 /* CONTENEDOR */
 .container{
-  max-width:1200px;
+  max-width:1100px;
   margin:auto;
   padding:30px 20px;
 }
 
-/* TITULOS */
-h2{
-  margin-bottom:15px;
-}
+/* PASOS */
+.step{display:none;}
+.active{display:block;}
 
 /* GRID */
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:20px;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:15px;
 }
 
 /* TARJETAS */
 .card{
   background:white;
-  border-radius:14px;
-  overflow:hidden;
-  box-shadow:0 8px 20px rgba(0,0,0,0.08);
-  transition:all 0.25s ease;
-  border:1px solid #eee;
+  padding:15px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  transition:0.2s;
 }
 
 .card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 12px 25px rgba(0,0,0,0.15);
-}
-
-.card img{
-  width:100%;
-  height:150px;
-  object-fit:cover;
-}
-
-.card-content{
-  padding:15px;
+  border-color:var(--naranja);
 }
 
 /* PRECIOS */
-.normal{
-  text-decoration:line-through;
-  color:#999;
-  font-size:13px;
-}
-
-.masgas{
-  text-decoration:line-through;
-  color:#bbb;
-  font-size:13px;
-}
-
-.feria{
-  color:var(--naranja);
-  font-weight:bold;
-  font-size:16px;
-  margin-top:5px;
-}
+.normal{ text-decoration:line-through; color:#999; font-size:13px;}
+.masgas{ text-decoration:line-through; color:#bbb; font-size:13px;}
+.feria{ color:var(--naranja); font-weight:bold;}
 
 /* INPUT */
 input{
   width:100%;
   padding:12px;
   margin-top:10px;
-  border-radius:10px;
-  border:1px solid #ddd;
-  transition:0.2s;
-}
-
-input:focus{
-  border-color:var(--naranja);
-  outline:none;
+  border-radius:8px;
+  border:1px solid #ccc;
 }
 
 /* BOTONES */
-button{
-  width:100%;
-  padding:14px;
-  margin-top:15px;
-  border:none;
-  border-radius:10px;
-  background:var(--naranja);
-  color:white;
-  font-size:16px;
-  font-weight:600;
-  cursor:pointer;
-  transition:0.3s;
+.botones{
+  display:flex;
+  gap:10px;
 }
 
-button:hover{
-  background:#e65c00;
+button{
+  flex:1;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
 }
+
+.next{ background:var(--naranja); color:white;}
+.back{ background:#ccc;}
 
 /* TOTAL */
 .total-box{
   position:fixed;
   bottom:20px;
   right:20px;
-  background:linear-gradient(135deg,#111,#222);
+  background:#111;
   color:white;
-  padding:18px;
-  border-radius:12px;
-  font-size:18px;
-  box-shadow:0 8px 25px rgba(0,0,0,0.3);
+  padding:15px;
+  border-radius:10px;
 }
 
-/* ERRORES */
-.error{
-  color:#d32f2f;
-  font-size:13px;
-}
+.error{ color:red; font-size:13px;}
 </style>
 </head>
 
@@ -159,45 +114,85 @@ button:hover{
 
 <div class="container">
 
-<h2>Selecciona los servicios</h2>
+<!-- PASO 1 -->
+<div class="step active" id="step1">
+<h2>Servicios</h2>
 
 <div class="grid">
 
-<!-- SERVICIO EJEMPLO -->
-<div class="card">
-<img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Oil_storage_tanks.jpg">
-<div class="card-content">
-<input type="checkbox" value="102">
-<b>Pruebas de hermeticidad en tanques</b>
-<div class="normal">Precio normal: $150</div>
-<div class="masgas">Precio cliente MasGas: $120</div>
-<div class="feria">Precio feria: $102</div>
-</div>
-</div>
+<!-- SERVICIOS COMPLETOS -->
+<div class="card"><input type="checkbox" value="102"><b>PRUEBAS DE HERMETICIDAD EN TANQUES</b><div class="normal">$150</div><div class="masgas">$120</div><div class="feria">$102</div></div>
 
-<!-- DUPLICA ESTE BLOQUE PARA LOS DEMÁS SERVICIOS -->
+<div class="card"><input type="checkbox" value="63.75"><b>PRUEBAS DE HERMETICIDAD EN LÍNEAS</b><div class="normal">$90</div><div class="masgas">$75</div><div class="feria">$63.75</div></div>
+
+<div class="card"><input type="checkbox" value="59.5"><b>PARÁMETROS DIMENSIONALES</b><div class="normal">$85</div><div class="masgas">$70</div><div class="feria">$59.5</div></div>
+
+<div class="card"><input type="checkbox" value="59.5"><b>INSPECCIÓN TÉCNICA POR MEDICIÓN DE ESPESORES</b><div class="normal">$85</div><div class="masgas">$70</div><div class="feria">$59.5</div></div>
+
+<div class="card"><input type="checkbox" value="382.5"><b>LIMPIEZA DE TANQUE CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES (INCLUYE CERTIFICADO DE LIMPIEZA)</b><div class="normal">$460</div><div class="masgas">$450</div><div class="feria">$382.5</div></div>
+
+<div class="card"><input type="checkbox" value="297.5"><b>LIMPIEZA DE TANQUE CON CAPACIDAD DE 1 MIL HASTA 4 MIL GALONES (INCLUYE CERTIFICADO DE LIMPIEZA)</b><div class="normal">$380</div><div class="masgas">$350</div><div class="feria">$297.5</div></div>
+
+<div class="card"><input type="checkbox" value="408"><b>CALIBRACIÓN LIQUIDA TANQUES CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES (INCLUYE VARILLA DE AFORO REGLETADA EN CM)</b><div class="normal">$500</div><div class="masgas">$480</div><div class="feria">$408</div></div>
+
+<div class="card"><input type="checkbox" value="153"><b>CALIBRACIÓN LIQUIDA TANQUES CON CAPACIDAD DE 1 MIL HASTA 4 MIL GALONES (INCLUYE VARILLA DE AFORO REGLETADA EN CM)</b><div class="normal">$200</div><div class="masgas">$180</div><div class="feria">$153</div></div>
+
+<div class="card"><input type="checkbox" value="365.5"><b>CALIBRACIÓN GEOMETRICA TANQUES CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES (INCLUYE VARILLA DE AFORO REGLETADA EN CM)</b><div class="normal">$490</div><div class="masgas">$430</div><div class="feria">$365.5</div></div>
+
+<div class="card"><input type="checkbox" value="127.5"><b>CALIBRACIÓN GEOMETRICA TANQUES CON CAPACIDAD DE 1 MIL HASTA 4 MIL HASTA (INCLUYE VARILLA DE AFORO REGLETADA EN CM)</b><div class="normal">$190</div><div class="masgas">$150</div><div class="feria">$127.5</div></div>
+
+<div class="card"><input type="checkbox" value="297.5"><b>MEMORIA TÉCNICA</b><div class="normal">$370</div><div class="masgas">$350</div><div class="feria">$297.5</div></div>
+
+<div class="card"><input type="checkbox" value="63.75"><b>CERTIFICACIÓN DE SURTIDORES NTE INEN 1781</b><div class="normal">$90</div><div class="masgas">$75</div><div class="feria">$63.75</div></div>
+
+<div class="card"><input type="checkbox" value="382.5"><b>CUMPLIMIENTO DE NORMAS DE SEGURIDAD NTE INEN 2251</b><div class="normal">$465</div><div class="masgas">$450</div><div class="feria">$382.5</div></div>
 
 </div>
 
 <div class="error" id="errorServicios"></div>
 
-<button onclick="validarServicios()">Siguiente</button>
+<div class="botones">
+<button class="next" onclick="validarServicios()">Siguiente</button>
+</div>
+</div>
 
+<!-- PASO 2 -->
+<div class="step" id="step2">
 <h2>Ubicación</h2>
 <input id="ubicacion" placeholder="Ingrese ciudad">
+<div class="error" id="errorUbicacion"></div>
 
-<h2>Datos</h2>
+<div class="botones">
+<button class="back" onclick="next(1)">← Anterior</button>
+<button class="next" onclick="validarUbicacion()">Siguiente</button>
+</div>
+</div>
+
+<!-- PASO 3 -->
+<div class="step" id="step3">
+<h2>Datos del cliente</h2>
+
 <input id="razon" placeholder="Razón Social">
 <input id="telefono" placeholder="Teléfono">
 
+<div class="error" id="errorDatos"></div>
+
+<div class="botones">
+<button class="back" onclick="next(2)">← Anterior</button>
+<button class="next" onclick="enviarWhatsApp()">Enviar Cotización</button>
+</div>
 </div>
 
+</div>
+
+<!-- TOTAL -->
 <div class="total-box">
 TOTAL: $<span id="total">0</span>
 </div>
 
 <script>
 
+// TOTAL EN VIVO
 function actualizarTotal(){
 let total=0;
 document.querySelectorAll("input[type=checkbox]:checked").forEach(c=>{
@@ -206,14 +201,51 @@ total+=parseFloat(c.value);
 document.getElementById("total").innerText=total;
 }
 
-document.addEventListener("change",actualizarTotal);
+document.querySelectorAll("input[type=checkbox]").forEach(c=>{
+c.addEventListener("change",actualizarTotal);
+});
 
+// VALIDACIONES
 function validarServicios(){
 if(document.querySelectorAll("input:checked").length==0){
 document.getElementById("errorServicios").innerText="Seleccione al menos un servicio";
 return;
 }
-alert("OK");
+next(2);
+}
+
+function validarUbicacion(){
+if(document.getElementById("ubicacion").value==""){
+document.getElementById("errorUbicacion").innerText="Ingrese ubicación";
+return;
+}
+next(3);
+}
+
+// NAVEGACIÓN
+function next(n){
+document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
+document.getElementById("step"+n).classList.add("active");
+}
+
+// WHATSAPP
+function enviarWhatsApp(){
+
+let total=document.getElementById("total").innerText;
+let ubicacion=document.getElementById("ubicacion").value;
+let cliente=document.getElementById("razon").value;
+
+if(cliente=="" || document.getElementById("telefono").value==""){
+document.getElementById("errorDatos").innerText="Complete los datos";
+return;
+}
+
+let mensaje="COTIZACIÓN PETROCHECK%0A"+
+"Cliente: "+cliente+"%0A"+
+"Ubicación: "+ubicacion+"%0A"+
+"Total: $"+total;
+
+window.open("https://wa.me/593999300398?text="+encodeURIComponent(mensaje));
 }
 
 </script>
