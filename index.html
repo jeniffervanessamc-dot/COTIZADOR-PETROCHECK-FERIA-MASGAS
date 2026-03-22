@@ -7,7 +7,7 @@
 <style>
 :root{
   --negro:#111;
-  --gris:#f5f5f5;
+  --gris:#f4f4f4;
   --naranja:#ff6a00;
 }
 
@@ -20,19 +20,19 @@ body{
 /* HEADER */
 header{
   background:var(--negro);
-  text-align:center;
   padding:25px;
+  text-align:center;
 }
 
 .logo{
-  width:180px;
+  width:220px;
 }
 
 /* CONTENEDOR */
 .container{
-  max-width:1100px;
+  max-width:1200px;
   margin:auto;
-  padding:20px;
+  padding:25px;
 }
 
 /* PASOS */
@@ -42,77 +42,87 @@ header{
 /* GRID */
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:15px;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:20px;
 }
 
 /* TARJETAS */
 .card{
   background:white;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 6px 15px rgba(0,0,0,0.1);
+  transition:0.3s;
+}
+
+.card:hover{
+  transform:translateY(-5px);
+}
+
+.card img{
+  width:100%;
+  height:160px;
+  object-fit:cover;
+}
+
+.card-content{
   padding:15px;
-  border-radius:10px;
-  border-left:5px solid var(--naranja);
-  box-shadow:0 4px 12px rgba(0,0,0,0.1);
 }
 
 /* PRECIOS */
-.tachado{
+.precio-normal{
   text-decoration:line-through;
-  color:gray;
+  color:#888;
+  font-size:13px;
 }
 
-.feria{
+.precio-masgas{
+  text-decoration:line-through;
+  color:#999;
+  font-size:13px;
+}
+
+.precio-feria{
   color:var(--naranja);
   font-weight:bold;
+  font-size:15px;
 }
 
-/* FORM */
-input, select{
+/* INPUT */
+input{
   width:100%;
-  padding:10px;
+  padding:12px;
   margin-top:10px;
-  border-radius:6px;
+  border-radius:8px;
   border:1px solid #ccc;
 }
 
-/* BOTONES */
+/* BOTÓN */
 button{
   width:100%;
-  padding:12px;
+  padding:14px;
   margin-top:15px;
+  border:none;
+  border-radius:10px;
   background:var(--naranja);
   color:white;
-  border:none;
-  border-radius:8px;
   font-size:16px;
   cursor:pointer;
-}
-
-button:hover{
-  background:#e65c00;
-}
-
-/* NOTA */
-.nota{
-  background:#fff3cd;
-  padding:10px;
-  border-radius:8px;
-  font-size:13px;
-  margin-top:10px;
 }
 
 /* RESULTADO */
 .resultado{
   background:white;
-  padding:20px;
-  border-radius:10px;
+  padding:25px;
+  border-radius:12px;
 }
 
 .total{
-  font-size:22px;
+  font-size:24px;
   color:var(--naranja);
   font-weight:bold;
 }
+
 </style>
 </head>
 
@@ -126,35 +136,158 @@ button:hover{
 
 <!-- PASO 1 -->
 <div class="step active" id="step1">
-<h3>1. Selecciona los servicios</h3>
+<h2>Selecciona los servicios</h2>
 
 <div class="grid">
 
-<div class="card"><input type="checkbox" value="102|120|150"> Hermeticidad en tanques<br><span class="tachado">$150</span> | <span class="tachado">$120</span> | <span class="feria">$102</span></div>
+<!-- HERMETICIDAD -->
+<div class="card">
+<img src="https://images.unsplash.com/photo-1581091215367-59ab6b3b9d6b">
+<div class="card-content">
+<input type="checkbox" value="102|120|150">
+<b>Pruebas de hermeticidad en tanques</b>
+<div class="precio-normal">Precio normal: $150</div>
+<div class="precio-masgas">Precio MasGas: $120</div>
+<div class="precio-feria">Precio feria: $102</div>
+</div>
+</div>
 
-<div class="card"><input type="checkbox" value="63.75|75|90"> Hermeticidad en líneas<br><span class="tachado">$90</span> | <span class="tachado">$75</span> | <span class="feria">$63.75</span></div>
+<div class="card">
+<img src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc">
+<div class="card-content">
+<input type="checkbox" value="63.75|75|90">
+<b>Pruebas de hermeticidad en líneas</b>
+<div class="precio-normal">Precio normal: $90</div>
+<div class="precio-masgas">Precio MasGas: $75</div>
+<div class="precio-feria">Precio feria: $63.75</div>
+</div>
+</div>
 
-<div class="card"><input type="checkbox" value="59.5|70|85"> Parámetros dimensionales<br><span class="tachado">$85</span> | <span class="tachado">$70</span> | <span class="feria">$59.5</span></div>
+<!-- INSPECCIONES -->
+<div class="card">
+<img src="https://images.unsplash.com/photo-1581090700227-1e8d5fbdfe47">
+<div class="card-content">
+<input type="checkbox" value="59.5|70|85">
+<b>Parámetros dimensionales</b>
+<div class="precio-normal">$85</div>
+<div class="precio-masgas">$70</div>
+<div class="precio-feria">$59.5</div>
+</div>
+</div>
 
-<div class="card"><input type="checkbox" value="59.5|70|85"> Inspección técnica<br><span class="tachado">$85</span> | <span class="tachado">$70</span> | <span class="feria">$59.5</span></div>
+<div class="card">
+<img src="https://images.unsplash.com/photo-1581091870627-3f089c6b6d8f">
+<div class="card-content">
+<input type="checkbox" value="59.5|70|85">
+<b>Inspección técnica por medición de espesores</b>
+<div class="precio-normal">$85</div>
+<div class="precio-masgas">$70</div>
+<div class="precio-feria">$59.5</div>
+</div>
+</div>
 
-<div class="card"><input type="checkbox" value="382.5|450|460"> Limpieza de tanque<br><span class="tachado">$460</span> | <span class="tachado">$450</span> | <span class="feria">$382.5</span></div>
+<!-- LIMPIEZA -->
+<div class="card">
+<img src="https://images.unsplash.com/photo-1605902711622-cfb43c44367f">
+<div class="card-content">
+<input type="checkbox" value="382.5|450|460">
+<b>Limpieza de tanque hasta 12 mil galones</b>
+<div class="precio-normal">$460</div>
+<div class="precio-masgas">$450</div>
+<div class="precio-feria">$382.5</div>
+</div>
+</div>
 
-<div class="card"><input type="checkbox" value="297.5|350|380"> Capacidad 1k-4k gal<br><span class="tachado">$380</span> | <span class="tachado">$350</span> | <span class="feria">$297.5</span></div>
+<!-- CAPACIDAD -->
+<div class="card">
+<img src="https://images.unsplash.com/photo-1567789884554-0b844b597180">
+<div class="card-content">
+<input type="checkbox" value="297.5|350|380">
+<b>Capacidad 1 mil a 4 mil galones</b>
+<div class="precio-normal">$380</div>
+<div class="precio-masgas">$350</div>
+<div class="precio-feria">$297.5</div>
+</div>
+</div>
 
-<div class="card"><input type="checkbox" value="408|480|500"> Calibración 5k-12k gal<br><span class="tachado">$500</span> | <span class="tachado">$480</span> | <span class="feria">$408</span></div>
+<!-- CALIBRACIONES -->
+<div class="card">
+<img src="https://images.unsplash.com/photo-1581092334425-6c3f1a7a7c0d">
+<div class="card-content">
+<input type="checkbox" value="408|480|500">
+<b>Calibración 5 mil a 12 mil galones</b>
+<div class="precio-normal">$500</div>
+<div class="precio-masgas">$480</div>
+<div class="precio-feria">$408</div>
+</div>
+</div>
 
-<div class="card"><input type="checkbox" value="365.5|430|490"> Calibración mayor<br><span class="tachado">$490</span> | <span class="tachado">$430</span> | <span class="feria">$365.5</span></div>
+<div class="card">
+<img src="https://images.unsplash.com/photo-1581092588420-6c7a7c9a77c7">
+<div class="card-content">
+<input type="checkbox" value="365.5|430|490">
+<b>Calibración líquida mayor</b>
+<div class="precio-normal">$490</div>
+<div class="precio-masgas">$430</div>
+<div class="precio-feria">$365.5</div>
+</div>
+</div>
 
-<div class="card"><input type="checkbox" value="153|180|200"> Calibración pequeña<br><span class="tachado">$200</span> | <span class="tachado">$180</span> | <span class="feria">$153</span></div>
+<div class="card">
+<img src="https://images.unsplash.com/photo-1581091215367-59ab6b3b9d6b">
+<div class="card-content">
+<input type="checkbox" value="153|180|200">
+<b>Calibración pequeña</b>
+<div class="precio-normal">$200</div>
+<div class="precio-masgas">$180</div>
+<div class="precio-feria">$153</div>
+</div>
+</div>
 
-<div class="card"><input type="checkbox" value="127.5|150|190"> Calibración adicional<br><span class="tachado">$190</span> | <span class="tachado">$150</span> | <span class="feria">$127.5</span></div>
+<div class="card">
+<img src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc">
+<div class="card-content">
+<input type="checkbox" value="127.5|150|190">
+<b>Calibración adicional</b>
+<div class="precio-normal">$190</div>
+<div class="precio-masgas">$150</div>
+<div class="precio-feria">$127.5</div>
+</div>
+</div>
 
-<div class="card"><input type="checkbox" value="297.5|350|370"> Memoria técnica<br><span class="tachado">$370</span> | <span class="tachado">$350</span> | <span class="feria">$297.5</span></div>
+<!-- OTROS -->
+<div class="card">
+<img src="https://images.unsplash.com/photo-1581090700227-1e8d5fbdfe47">
+<div class="card-content">
+<input type="checkbox" value="297.5|350|370">
+<b>Memoria técnica</b>
+<div class="precio-normal">$370</div>
+<div class="precio-masgas">$350</div>
+<div class="precio-feria">$297.5</div>
+</div>
+</div>
 
-<div class="card"><input type="checkbox" value="63.75|75|90"> Certificación surtidores<br><span class="tachado">$90</span> | <span class="tachado">$75</span> | <span class="feria">$63.75</span></div>
+<div class="card">
+<img src="https://images.unsplash.com/photo-1581091870627-3f089c6b6d8f">
+<div class="card-content">
+<input type="checkbox" value="63.75|75|90">
+<b>Certificación de surtidores</b>
+<div class="precio-normal">$90</div>
+<div class="precio-masgas">$75</div>
+<div class="precio-feria">$63.75</div>
+</div>
+</div>
 
-<div class="card"><input type="checkbox" value="382.5|450|465"> Cumplimiento INEN<br><span class="tachado">$465</span> | <span class="tachado">$450</span> | <span class="feria">$382.5</span></div>
+<div class="card">
+<img src="https://images.unsplash.com/photo-1567789884554-0b844b597180">
+<div class="card-content">
+<input type="checkbox" value="382.5|450|465">
+<b>Cumplimiento de normas INEN</b>
+<div class="precio-normal">$465</div>
+<div class="precio-masgas">$450</div>
+<div class="precio-feria">$382.5</div>
+</div>
+</div>
 
 </div>
 
@@ -163,40 +296,34 @@ button:hover{
 
 <!-- PASO 2 -->
 <div class="step" id="step2">
-<h3>2. Ubicación</h3>
+<h2>Ubicación</h2>
 
-<div class="nota">
-⚠️ <b>Importante:</b> El costo logístico es por día y puede variar según la duración del servicio y la ubicación.
-</div>
+<input id="ubicacion" placeholder="Ej: Quito, Guayaquil, Ambato...">
 
-<select id="ciudad">
-<option value="pichincha">Pichincha</option>
-<option value="tungurahua">Tungurahua</option>
-<option value="guayas">Guayas</option>
-<option value="azuay">Azuay</option>
-<option value="amazonia">Amazonía</option>
-</select>
+<p style="font-size:13px;">⚠️ El costo logístico es por día</p>
 
 <button onclick="next(3)">Siguiente</button>
 </div>
 
 <!-- PASO 3 -->
 <div class="step" id="step3">
-<h3>3. Datos del cliente</h3>
+<h2>Datos del cliente</h2>
 
 <input id="razon" placeholder="Razón Social">
 <input id="ruc" placeholder="RUC">
-<input id="contacto" placeholder="Persona de contacto">
+<input id="contacto" placeholder="Contacto">
 <input id="telefono" placeholder="Teléfono">
-<input id="correo" placeholder="Correo electrónico">
-<input id="fecha" type="date">
+<input id="correo" placeholder="Correo">
+
+<label>Fecha tentativa del servicio</label>
+<input type="date" id="fecha">
 
 <button onclick="calcular()">Finalizar</button>
 </div>
 
 <!-- RESULTADO -->
 <div class="step" id="step4">
-<h3>Resumen</h3>
+<h2>Resumen</h2>
 <div class="resultado" id="resultado"></div>
 <button onclick="whatsapp()">Enviar por WhatsApp</button>
 </div>
@@ -210,40 +337,32 @@ document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
 document.getElementById("step"+n).classList.add("active");
 }
 
-function logistica(c){
-if(c=="pichincha") return 131;
-if(c=="tungurahua") return 131;
-if(c=="guayas") return 147;
-if(c=="azuay") return 131;
-if(c=="amazonia") return 140;
+function detectarZona(txt){
+txt=txt.toLowerCase();
+
+if(txt.includes("quito")) return 131;
+if(txt.includes("ambato")) return 131;
+if(txt.includes("guayaquil")) return 147;
+
+return 140;
 }
 
 let mensaje="";
 
 function calcular(){
-
-let checks=document.querySelectorAll("input[type=checkbox]:checked");
-
 let total=0;
 
-checks.forEach(c=>{
-let d=c.value.split("|");
-total+=parseFloat(d[0]);
+document.querySelectorAll("input[type=checkbox]:checked").forEach(c=>{
+total+=parseFloat(c.value.split("|")[0]);
 });
 
-let ciudad=document.getElementById("ciudad").value;
-let log=logistica(ciudad);
+let log=detectarZona(document.getElementById("ubicacion").value);
 let final=total+log;
 
-mensaje=
-"COTIZACIÓN PETROCHECK%0A"+
-"Cliente: "+document.getElementById("razon").value+"%0A"+
-"Contacto: "+document.getElementById("contacto").value+"%0A"+
-"Teléfono: "+document.getElementById("telefono").value+"%0A"+
-"Total: $"+final;
+mensaje="Total: $"+final;
 
 document.getElementById("resultado").innerHTML=
-"Subtotal: $"+total+
+"Servicios: $"+total+
 "<br>Logística: $"+log+
 "<div class='total'>TOTAL: $"+final+"</div>";
 
@@ -251,7 +370,7 @@ next(4);
 }
 
 function whatsapp(){
-window.open("https://wa.me/593XXXXXXXXX?text="+mensaje);
+window.open("https://wa.me/59399300398?text="+mensaje);
 }
 
 </script>
