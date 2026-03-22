@@ -7,24 +7,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-.card{
-  display:flex !important;
-  flex-direction:column;
-  justify-content:space-between;
-  min-height:180px;
-}
-
-.precios{
-  margin-top:auto !important;
-}
-
-/* opcional: mejora títulos largos */
-.card b{
-  display:block;
-  min-height:40px;
-}
-
-
 <style>
 :root{
   --primary:#1a1a1a;
@@ -224,9 +206,33 @@ doc.save("cotizacion.pdf");
 function enviarWhatsApp(){
 let txt=document.getElementById("resumenBox").innerText;
 window.open("https://wa.me/593999300398?text="+encodeURIComponent(txt));
+}```html id="fix_cards_js"
+<style>
+.card.fix-card{
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:space-between !important;
+  min-height:180px !important;
 }
 
+.card.fix-card .precios{
+  margin-top:auto !important;
+}
+
+.card.fix-card b{
+  min-height:40px;
+}
+</style>
+
+<script>
+// 🔥 aplica automáticamente la clase a todas las cards
+document.addEventListener("DOMContentLoaded", ()=>{
+  document.querySelectorAll(".card").forEach(c=>{
+    c.classList.add("fix-card");
+  });
+});
 </script>
+```
 
 </body>
 </html>
