@@ -3,82 +3,260 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Cotizador Petrocheck PRO</title>
+<title>Cotizador Petrocheck</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-body{font-family:sans-serif;background:#f8fafc;margin:0;}
-.container{max-width:1000px;margin:auto;padding:20px;}
-.card{border:1px solid #ddd;padding:10px;border-radius:8px;margin-bottom:10px;}
-button{padding:10px;margin-top:10px;border:none;border-radius:6px;cursor:pointer;}
-.next{background:#f97316;color:white;}
-.back{background:#ddd;}
+:root{
+  --primary:#1a1a1a;
+  --accent:#f97316;
+  --bg:#f8fafc;
+  --card:#ffffff;
+  --text:#333;
+}
+
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+header{
+  background:white;
+  border-bottom:1px solid #e5e7eb;
+  padding:15px;
+  text-align:center;
+}
+
+.logo{ height:45px; }
+
+.container{
+  max-width:1000px;
+  margin:auto;
+  padding:25px;
+}
+
+.step{display:none;}
+.active{display:block;}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:12px;
+}
+
+.card{
+  background:var(--card);
+  padding:14px;
+  border-radius:10px;
+  border:1px solid #e5e7eb;
+  transition:0.2s;
+  font-size:13.5px;
+}
+.card:hover{ border-color:var(--accent); }
+
+.card b{ display:block; margin-top:6px; }
+
+.precios{
+  margin-top:10px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.tag.normal{
+  text-decoration:line-through;
+  color:#9ca3af;
+}
+
+.tag.masgas{
+  text-decoration:line-through;
+  color:#6b7280;
+}
+
+.tag.feria{
+  color:#fff;
+  background:var(--accent);
+  padding:4px 8px;
+  border-radius:6px;
+  font-weight:600;
+  width:max-content;
+}
+
+input{
+  width:100%;
+  padding:10px;
+  margin-top:8px;
+  border-radius:6px;
+  border:1px solid #d1d5db;
+}
+
+.botones{
+  display:flex;
+  gap:10px;
+  margin-top:15px;
+}
+
+button{
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.next{ background:var(--accent); color:white;}
+.back{ background:#e5e7eb;}
+
+.total-box{
+  position:fixed;
+  top:15px;
+  right:15px;
+  background:white;
+  border:1px solid #e5e7eb;
+  padding:12px 16px;
+  border-radius:10px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+.total-box span{
+  color:var(--accent);
+  font-weight:bold;
+}
+
+/* 🔥 RESUMEN PRO */
+.resumen-card{
+  margin-top:20px;
+  background:white;
+  padding:18px;
+  border-radius:12px;
+  border:1px solid #e5e7eb;
+  box-shadow:0 4px 10px rgba(0,0,0,0.05);
+}
+
+.resumen-card h4{
+  margin-top:0;
+  border-bottom:1px solid #eee;
+  padding-bottom:8px;
+}
+
+.resumen-item{
+  display:flex;
+  justify-content:space-between;
+  font-size:13px;
+  margin-bottom:4px;
+}
+
+.resumen-total{
+  margin-top:10px;
+  padding-top:10px;
+  border-top:1px dashed #ddd;
+}
+
+.feria{
+  color:var(--accent);
+  font-size:16px;
+  font-weight:bold;
+}
+
+.ahorro{
+  color:#16a34a;
+  font-weight:bold;
+}
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<header>
+<img src="https://petrocheck.com.ec/wp-content/uploads/2023/07/logo-petrocheck.png" class="logo">
+</header>
 
-<h2>Servicios</h2>
-<div id="listaServicios"></div>
-
-<button class="next" onclick="validar()">Siguiente</button>
-
-<div id="step2" style="display:none;">
-<h3>Ubicación</h3>
-<input id="ubicacion" placeholder="Ej: Quito">
-<button class="next" onclick="mostrarResumen()">Continuar</button>
+<div class="total-box">
+Total: $<span id="total">0.00</span>
 </div>
 
-<div id="step3" style="display:none;">
-<h3>Resumen</h3>
-<div id="resumen"></div>
+<div class="container">
 
+<!-- PASO 1 -->
+<div class="step active" id="step1">
+<h3>Servicios</h3>
+<div class="grid" id="listaServicios"></div>
+<div class="botones">
+<button class="next" onclick="validar()">Siguiente</button>
+</div>
+</div>
+
+<!-- RESUMEN -->
+<div id="resumenBox" class="resumen-card"></div>
+
+<!-- PASO 2 -->
+<div class="step" id="step2">
+<h3>Ubicación</h3>
+<input id="ubicacion" placeholder="Ej: Quito">
+<div class="botones">
+<button class="back" onclick="next(1)">Anterior</button>
+<button class="next" onclick="next(3)">Siguiente</button>
+</div>
+</div>
+
+<!-- PASO 3 -->
+<div class="step" id="step3">
+<h3>Finalizar</h3>
+<div class="botones">
 <button onclick="generarPDF()">📄 Descargar PDF</button>
-<button onclick="enviarWhatsApp()">📲 Enviar WhatsApp</button>
+<button onclick="whatsapp()">📲 WhatsApp</button>
+</div>
 </div>
 
 </div>
 
 <script>
 
+// SERVICIOS COMPLETOS
 const servicios = [
 ["PRUEBAS DE HERMETICIDAD EN TANQUES",102,120,150],
 ["PRUEBAS DE HERMETICIDAD EN LÍNEAS",63.75,75,90],
 ["PARÁMETROS DIMENSIONALES",59.5,70,85],
 ["INSPECCIÓN TÉCNICA POR MEDICIÓN DE ESPESORES",59.5,70,85],
-["LIMPIEZA  DE TANQUE CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES  (INCLUYE CERTIFICADO DE LIMPIEZA)",382.5,450,460],
-["LIMPIEZA  DE TANQUE CON CAPACIDAD  DE 1 MIL HASTA 4 MIL GALONES (INCLUYE CERTIFICADO DE LIMPIEZA)",297.5,350,380],
-["CALIBRACIÓN LIQUIDA TANQUES CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES  (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",408,480,500],
-["CALIBRACIÓN LIQUIDA TANQUES CON CAPACIDAD DE 1 MIL HASTA 4 MIL GALONES (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",153,180,200],
-["CALIBRACIÓN GEOMETRICA TANQUES CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES  (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",365.5,430,490],
-["CALIBRACIÓN GEOMETRICA TANQUES CON CAPACIDAD DE 1 MIL HASTA 4 MIL HASTA (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",127.5,150,190],
+["LIMPIEZA  DE TANQUE 5K-12K (CERTIFICADO)",382.5,450,460],
+["LIMPIEZA  DE TANQUE 1K-4K (CERTIFICADO)",297.5,350,380],
+["CALIBRACIÓN LIQUIDA 5K-12K",408,480,500],
+["CALIBRACIÓN LIQUIDA 1K-4K",153,180,200],
+["CALIBRACIÓN GEOMÉTRICA 5K-12K",365.5,430,490],
+["CALIBRACIÓN GEOMÉTRICA 1K-4K",127.5,150,190],
 ["MEMORIA TÉCNICA",297.5,350,370],
-["CERTIFICACIÓN DE SURTIDORES NTE INEN 1781",63.75,75,90],
-["CUMPLIMIENTO DE NORMAS DE SEGURIDAD NTE INEN 2251",382.5,450,465]
+["CERTIFICACIÓN NTE INEN 1781",63.75,75,90],
+["NORMAS DE SEGURIDAD NTE INEN 2251",382.5,450,465]
 ];
 
 const cont = document.getElementById("listaServicios");
 
-servicios.forEach((s,i)=>{
+servicios.forEach(s=>{
 cont.innerHTML+=`
 <div class="card">
-<input type="checkbox" id="s${i}">
-<b>${s[0]}</b><br>
-Normal: $${s[3]} | MasGas: $${s[2]} | Feria: $${s[1]}
+<input type="checkbox" value="${s[1]}" onchange="total(); actualizarResumen();">
+<b>${s[0]}</b>
+<div class="precios">
+<span class="tag normal">$${s[3]}</span>
+<span class="tag masgas">$${s[2]}</span>
+<span class="tag feria">$${s[1]}</span>
+</div>
 </div>`;
 });
 
-function validar(){
-if(document.querySelectorAll("input[type=checkbox]:checked").length==0){
-alert("Selecciona al menos un servicio");
-return;
-}
-document.getElementById("step2").style.display="block";
+// TOTAL
+function total(){
+let t=0;
+document.querySelectorAll("input:checked").forEach(c=>{
+t+=parseFloat(c.value);
+});
+document.getElementById("total").innerText=t.toFixed(2);
 }
 
+// LOGÍSTICA
 function calcularLogistica(u){
 u=u.toLowerCase();
 if(u.includes("quito")) return 131;
@@ -86,86 +264,83 @@ if(u.includes("guayaquil")) return 147;
 return 140;
 }
 
-function obtenerDatos(){
+// RESUMEN BONITO
+function actualizarResumen(){
 
-let lista=[];
 let normal=0, masgas=0, feria=0;
+let listaHTML="";
 
-servicios.forEach((s,i)=>{
-let chk=document.getElementById("s"+i);
-if(chk.checked){
-lista.push(s[0]);
-feria+=s[1];
-masgas+=s[2];
-normal+=s[3];
-}
+document.querySelectorAll("input:checked").forEach(c=>{
+let card=c.closest(".card");
+let p=card.querySelectorAll(".tag");
+
+normal+=parseFloat(p[0].innerText.replace("$",""));
+masgas+=parseFloat(p[1].innerText.replace("$",""));
+feria+=parseFloat(p[2].innerText.replace("$",""));
+
+listaHTML+=`<div class="resumen-item">
+<span>${card.querySelector("b").innerText}</span>
+<span>$${p[2].innerText.replace("$","")}</span>
+</div>`;
 });
 
-let u=document.getElementById("ubicacion").value;
+let ubicacion=document.getElementById("ubicacion").value;
 let log=0;
 
-if(u){
-log=calcularLogistica(u);
-normal+=log;
-masgas+=log;
-feria+=log;
+if(ubicacion){
+log=calcularLogistica(ubicacion);
+normal+=log; masgas+=log; feria+=log;
+
+listaHTML+=`<div class="resumen-item">
+<span>Logística</span>
+<span>$${log}</span>
+</div>`;
 }
 
-return {lista,normal,masgas,feria,log};
-}
+document.getElementById("resumenBox").innerHTML=`
+<h4>Resumen de cotización</h4>
 
-function mostrarResumen(){
-let d=obtenerDatos();
+${listaHTML || "Sin servicios seleccionados"}
 
-document.getElementById("step3").style.display="block";
-
-document.getElementById("resumen").innerHTML=`
-${d.lista.join("<br>")}<br><br>
-Logística: $${d.log}<br><br>
-Normal: $${d.normal.toFixed(2)}<br>
-MasGas: $${d.masgas.toFixed(2)}<br>
-<b>Feria: $${d.feria.toFixed(2)}</b><br><br>
-Ahorro: $${(d.normal-d.feria).toFixed(2)}
+<div class="resumen-total">
+<div>Normal: $${normal.toFixed(2)}</div>
+<div>MasGas: $${masgas.toFixed(2)}</div>
+<div class="feria">Feria: $${feria.toFixed(2)}</div>
+<div class="ahorro">Ahorro: $${(normal-feria).toFixed(2)}</div>
+</div>
 `;
 }
 
-// ================= PDF =================
-async function generarPDF(){
+// NAVEGACIÓN
+function next(n){
+document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
+document.getElementById("step"+n).classList.add("active");
+actualizarResumen();
+}
 
+function validar(){
+if(document.querySelectorAll("input:checked").length==0){
+alert("Selecciona al menos un servicio");
+return;
+}
+next(2);
+}
+
+// PDF
+function generarPDF(){
 const { jsPDF } = window.jspdf;
 const doc = new jsPDF();
 
-let d=obtenerDatos();
+let texto=document.getElementById("resumenBox").innerText;
 
-let y=10;
-
-doc.text("COTIZACIÓN PETROCHECK",10,y);
-y+=10;
-
-d.lista.forEach(s=>{
-doc.text("- "+s,10,y);
-y+=6;
-});
-
-y+=5;
-doc.text("Logística: $"+d.log,10,y); y+=6;
-doc.text("Total normal: $"+d.normal.toFixed(2),10,y); y+=6;
-doc.text("Total MasGas: $"+d.masgas.toFixed(2),10,y); y+=6;
-doc.text("Total feria: $"+d.feria.toFixed(2),10,y); y+=6;
-doc.text("Ahorro: $"+(d.normal-d.feria).toFixed(2),10,y);
-
+doc.text(texto,10,10);
 doc.save("cotizacion.pdf");
 }
 
-// ================= WHATSAPP =================
-function enviarWhatsApp(){
-let d=obtenerDatos();
-
-let msg="COTIZACIÓN PETROCHECK\n\n";
-msg+=d.lista.join("\n")+"\n\n";
-msg+="Total Feria: $"+d.feria.toFixed(2);
-
-window.open("https://wa.me/593XXXXXXXXX?text="+encodeURIComponent(msg));
+// WHATSAPP
+function whatsapp(){
+let texto=document.getElementById("resumenBox").innerText;
+window.open("https://wa.me/593XXXXXXXXX?text="+encodeURIComponent(texto));
 }
 
 </script>
