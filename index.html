@@ -136,6 +136,31 @@ Total: $<span id="total">0</span>
 </div>
 
 <div class="container">
+.precios{
+  margin-top:8px;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+
+.tag{
+  font-size:12px;
+}
+
+.tag.normal{
+  text-decoration:line-through;
+  color:#9ca3af;
+}
+
+.tag.masgas{
+  text-decoration:line-through;
+  color:#cbd5f5;
+}
+
+.tag.feria{
+  color:#f97316;
+  font-weight:600;
+}
 
 <!-- PASO 1 -->
 <div class="step active" id="step1">
@@ -287,31 +312,6 @@ Total: $<span id="total">0</span>
 </div>
 
 </div>
-.precios{
-  margin-top:8px;
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-}
-
-.tag{
-  font-size:12px;
-}
-
-.tag.normal{
-  text-decoration:line-through;
-  color:#9ca3af;
-}
-
-.tag.masgas{
-  text-decoration:line-through;
-  color:#cbd5f5;
-}
-
-.tag.feria{
-  color:#f97316;
-  font-weight:600;
-}
 
 <div class="botones">
 <button class="next" onclick="next(2)">Siguiente</button>
@@ -365,7 +365,7 @@ document.getElementById("step"+n).classList.add("active");
 function whatsapp(){
 let total=document.getElementById("total").innerText;
 let msg="Cotización Petrocheck%0ATotal: $"+total;
-window.open("https://wa.me/593XXXXXXXXX?text="+msg);
+window.open("https://wa.me/593999300398?text="+msg);
 }
 
 </script>
