@@ -1,21 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Cotizador Petrocheck</title>
+  <title>Cotizador Petrocheck PRO</title>
 
   <style>
     body {
       font-family: Arial;
       background: #f4f4f4;
-      padding: 30px;
+      padding: 20px;
     }
 
-    .box {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 600px;
+    h2 {
+      text-align: center;
+    }
+
+    .container {
+      max-width: 900px;
       margin: auto;
+    }
+
+    .servicio {
+      background: white;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+    }
+
+    .servicio input {
+      margin-right: 10px;
+    }
+
+    .precios {
+      font-size: 14px;
+      color: #555;
     }
 
     select, button {
@@ -33,29 +51,106 @@
     }
 
     .resultado {
-      margin-top: 20px;
       background: #eaffea;
-      padding: 15px;
-      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 10px;
     }
   </style>
 </head>
 
 <body>
 
-<div class="box">
+<div class="container">
 
 <h2>💰 Cotizador Petrocheck</h2>
 
-<label>Servicio:</label>
-<select id="servicio">
-  <option value="102|150">Hermeticidad en tanques</option>
-  <option value="63.75|90">Hermeticidad en líneas</option>
-  <option value="59.5|85">Parámetros dimensionales</option>
-  <option value="382.5|460">Limpieza de tanque</option>
-</select>
+<!-- SERVICIOS -->
+<div id="servicios">
 
-<label>Zona:</label>
+  <div class="servicio">
+    <input type="checkbox" value="102|120|150">
+    <b>Pruebas de hermeticidad en tanques</b>
+    <div class="precios">Normal: $150 | MasGas: $120 | Feria: $102</div>
+  </div>
+
+  <div class="servicio">
+    <input type="checkbox" value="63.75|75|90">
+    <b>Pruebas de hermeticidad en líneas</b>
+    <div class="precios">Normal: $90 | MasGas: $75 | Feria: $63.75</div>
+  </div>
+
+  <div class="servicio">
+    <input type="checkbox" value="59.5|70|85">
+    <b>Parámetros dimensionales</b>
+    <div class="precios">Normal: $85 | MasGas: $70 | Feria: $59.5</div>
+  </div>
+
+  <div class="servicio">
+    <input type="checkbox" value="59.5|70|85">
+    <b>Inspección técnica por medición de espesores</b>
+    <div class="precios">Normal: $85 | MasGas: $70 | Feria: $59.5</div>
+  </div>
+
+  <div class="servicio">
+    <input type="checkbox" value="382.5|450|460">
+    <b>Limpieza de tanque (hasta 12 mil galones)</b>
+    <div class="precios">Normal: $460 | MasGas: $450 | Feria: $382.5</div>
+  </div>
+
+  <div class="servicio">
+    <input type="checkbox" value="297.5|350|380">
+    <b>Capacidad 1 mil a 4 mil galones</b>
+    <div class="precios">Normal: $380 | MasGas: $350 | Feria: $297.5</div>
+  </div>
+
+  <div class="servicio">
+    <input type="checkbox" value="408|480|500">
+    <b>Calibración 5 mil a 12 mil galones</b>
+    <div class="precios">Normal: $500 | MasGas: $480 | Feria: $408</div>
+  </div>
+
+  <div class="servicio">
+    <input type="checkbox" value="365.5|430|490">
+    <b>Calibración líquida mayor (hasta 12 mil galones)</b>
+    <div class="precios">Normal: $490 | MasGas: $430 | Feria: $365.5</div>
+  </div>
+
+  <div class="servicio">
+    <input type="checkbox" value="153|180|200">
+    <b>Calibración pequeña</b>
+    <div class="precios">Normal: $200 | MasGas: $180 | Feria: $153</div>
+  </div>
+
+  <div class="servicio">
+    <input type="checkbox" value="127.5|150|190">
+    <b>Calibración adicional</b>
+    <div class="precios">Normal: $190 | MasGas: $150 | Feria: $127.5</div>
+  </div>
+
+  <div class="servicio">
+    <input type="checkbox" value="297.5|350|370">
+    <b>Memoria técnica</b>
+    <div class="precios">Normal: $370 | MasGas: $350 | Feria: $297.5</div>
+  </div>
+
+  <div class="servicio">
+    <input type="checkbox" value="63.75|75|90">
+    <b>Certificación de surtidores</b>
+    <div class="precios">Normal: $90 | MasGas: $75 | Feria: $63.75</div>
+  </div>
+
+  <div class="servicio">
+    <input type="checkbox" value="382.5|450|465">
+    <b>Cumplimiento normas INEN</b>
+    <div class="precios">Normal: $465 | MasGas: $450 | Feria: $382.5</div>
+  </div>
+
+</div>
+</div>
+
+<!-- ZONA -->
+<label>📍 Selecciona tu zona:</label>
 <select id="zona">
   <option value="131">Zona 1 (1 día)</option>
   <option value="131">Zona 2 (1 día)</option>
@@ -73,45 +168,53 @@
 </div>
 
 <script>
-let totalFinal = 0;
-let mensajeFinal = "";
+
+let totalFeria = 0;
+let totalNormal = 0;
+let totalMasgas = 0;
+let mensaje = "";
 
 function calcular() {
 
-  let datos = document.getElementById("servicio").value.split("|");
+  let checks = document.querySelectorAll("#servicios input:checked");
 
-  let precioFeria = parseFloat(datos[0]);
-  let precioNormal = parseFloat(datos[1]);
+  totalFeria = 0;
+  totalNormal = 0;
+  totalMasgas = 0;
+
+  checks.forEach(c => {
+    let datos = c.value.split("|");
+
+    totalFeria += parseFloat(datos[0]);
+    totalMasgas += parseFloat(datos[1]);
+    totalNormal += parseFloat(datos[2]);
+  });
+
   let logistica = parseFloat(document.getElementById("zona").value);
+  let totalFinal = totalFeria + logistica;
 
-  let total = precioFeria + logistica;
-  let ahorro = precioNormal - precioFeria;
-
-  totalFinal = total;
-
-  mensajeFinal =
+  mensaje =
     "COTIZACIÓN PETROCHECK%0A" +
-    "Servicio: " + document.getElementById("servicio").options[document.getElementById("servicio").selectedIndex].text + "%0A" +
-    "Precio normal: $" + precioNormal + "%0A" +
-    "Precio feria: $" + precioFeria + "%0A" +
+    "Total Normal: $" + totalNormal + "%0A" +
+    "Total MasGas: $" + totalMasgas + "%0A" +
+    "Total Feria: $" + totalFeria + "%0A" +
     "Logística: $" + logistica + "%0A" +
-    "TOTAL: $" + total.toFixed(2);
+    "TOTAL FINAL: $" + totalFinal;
 
   document.getElementById("resultado").innerHTML =
-    "<b>Precio feria:</b> $" + precioFeria +
+    "<b>Total Normal:</b> $" + totalNormal +
+    "<br><b>Total MasGas:</b> $" + totalMasgas +
+    "<br><b>💥 Total Feria:</b> $" + totalFeria +
     "<br><b>Logística:</b> $" + logistica +
-    "<br><b>Total:</b> $" + total.toFixed(2) +
-    "<br><b>Ahorro:</b> $" + ahorro.toFixed(2);
+    "<br><hr><b>💰 TOTAL FINAL:</b> $" + totalFinal;
+
 }
 
 function enviarWhatsApp() {
-
-  let numero = "593999300398"; // ← CAMBIA TU NÚMERO
-
-  let url = "https://wa.me/" + numero + "?text=" + mensajeFinal;
-
-  window.open(url, "_blank");
+  let numero = "593XXXXXXXXX";
+  window.open("https://wa.me/" + numero + "?text=" + mensaje);
 }
+
 </script>
 
 </body>
