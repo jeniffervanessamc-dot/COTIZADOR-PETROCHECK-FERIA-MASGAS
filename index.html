@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cotizador</title>
+</head>
+<body>
+
+<h2>Cotizador de Servicios</h2>
+
+<select id="paquete">
+  <option value="100">Básico - $100</option>
+  <option value="200">Intermedio - $200</option>
+  <option value="300">Completo - $300</option>
+</select>
+
+<br><br>
+
+<button onclick="calcular()">Calcular</button>
+
+<h3 id="resultado"></h3>
+
+<script>
+function calcular() {
+  let precio = document.getElementById("paquete").value;
+  let mensual = precio / 12;
+
+  document.getElementById("resultado").innerHTML =
+    "Total anual: $" + precio +
+    "<br>Mensual: $" + mensual.toFixed(2);
+}
+</script>
+
+</body>
+</html> 
