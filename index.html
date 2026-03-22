@@ -15,40 +15,32 @@
   --card:#ffffff;
   --text:#333;
 }
-
-body{
-  margin:0;
-  font-family:'Segoe UI',sans-serif;
-  background:var(--bg);
-}
-
+body{margin:0;font-family:'Segoe UI';background:var(--bg);}
 .container{max-width:1000px;margin:auto;padding:25px;}
-.step{display:none;}
-.active{display:block;}
-
+.step{display:none;} .active{display:block;}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;}
 
 .card{background:white;padding:14px;border-radius:10px;border:1px solid #e5e7eb;}
 .card b{display:block;margin-top:6px;}
 
-.precios{margin-top:10px;}
 .tag.normal{text-decoration:line-through;color:#9ca3af;}
 .tag.masgas{text-decoration:line-through;color:#6b7280;}
-.tag.feria{background:#f97316;color:white;padding:3px 6px;border-radius:5px;}
+.tag.feria{background:#f97316;color:white;padding:4px 8px;border-radius:6px;}
 
 input{width:100%;padding:10px;margin-top:8px;border-radius:6px;border:1px solid #ccc;}
 
-button{padding:10px;border:none;border-radius:6px;margin-top:10px;cursor:pointer;}
+.botones{display:flex;gap:10px;margin-top:15px;}
+button{flex:1;padding:10px;border:none;border-radius:6px;cursor:pointer;}
 .next{background:#f97316;color:white;}
 .back{background:#ddd;}
 
-.total-box{position:fixed;top:10px;right:10px;background:white;padding:10px;border-radius:8px;}
+.total-box{position:fixed;top:15px;right:15px;background:white;padding:10px;border-radius:10px;}
 </style>
 </head>
 
 <body>
 
-<div class="total-box">Total: $<span id="total">0</span></div>
+<div class="total-box">Total: $<span id="total">0.00</span></div>
 
 <div class="container">
 
@@ -56,18 +48,19 @@ button{padding:10px;border:none;border-radius:6px;margin-top:10px;cursor:pointer
 <div class="step active" id="step1">
 <h3>Servicios</h3>
 <div class="grid" id="listaServicios"></div>
+<div class="botones">
 <button class="next" onclick="validar()">Siguiente</button>
+</div>
 </div>
 
 <!-- RESUMEN -->
-<div id="resumenBox"></div>
+<div id="resumenBox" style="margin-top:20px;background:white;padding:15px;border-radius:10px;border:1px solid #e5e7eb;"></div>
 
 <!-- PASO 2 -->
 <div class="step" id="step2">
 <h3>Ubicación</h3>
 
-<input id="ubicacion" list="ciudades">
-
+<input id="ubicacion" list="ciudades" placeholder="Ej: Quito">
 <datalist id="ciudades">
 <option value="Quito"><option value="Guayaquil"><option value="Cuenca">
 <option value="Ambato"><option value="Latacunga"><option value="Riobamba">
@@ -75,18 +68,14 @@ button{padding:10px;border:none;border-radius:6px;margin-top:10px;cursor:pointer
 <option value="Machala"><option value="Puyo"><option value="Lago Agrio">
 </datalist>
 
+<div class="botones">
 <button class="back" onclick="next(1)">Anterior</button>
 <button class="next" onclick="next(3)">Siguiente</button>
+</div>
 </div>
 
 <!-- PASO 3 -->
 <div class="step" id="step3">
-<h3>Continuar</h3>
-<button class="next" onclick="next(4)">Ingresar datos</button>
-</div>
-
-<!-- PASO 4 -->
-<div class="step" id="step4">
 <h3>Datos del cliente</h3>
 
 <input id="razon" placeholder="Razón Social">
@@ -96,15 +85,27 @@ button{padding:10px;border:none;border-radius:6px;margin-top:10px;cursor:pointer
 <input id="telefono" placeholder="Teléfono">
 <input id="correo" placeholder="Correo">
 
-<button class="back" onclick="next(3)">Anterior</button>
-<button class="next" onclick="finalizar()">Finalizar</button>
+<div class="botones">
+<button class="back" onclick="next(2)">Anterior</button>
+<button class="next" onclick="next(4)">Continuar</button>
+</div>
+</div>
+
+<!-- PASO FINAL -->
+<div class="step" id="step4">
+<h3>Finalizar</h3>
+
+<div class="botones">
+<button onclick="generarPDF()">📄 Descargar PDF</button>
+<button onclick="enviarWhatsApp()">📲 Enviar WhatsApp</button>
+</div>
 </div>
 
 </div>
 
 <script>
 
-// SERVICIOS (NO CAMBIADOS)
+// SERVICIOS (NO MODIFICADOS)
 const servicios = [
 ["PRUEBAS DE HERMETICIDAD EN TANQUES",102,120,150],
 ["PRUEBAS DE HERMETICIDAD EN LÍNEAS",63.75,75,90],
@@ -121,7 +122,7 @@ const servicios = [
 ["NORMAS DE SEGURIDAD NTE INEN 2251",382.5,450,465]
 ];
 
-const cont = document.getElementById("listaServicios");
+const cont=document.getElementById("listaServicios");
 
 servicios.forEach(s=>{
 cont.innerHTML+=`
@@ -173,12 +174,18 @@ normal+=log; masgas+=log; feria+=log;
 
 document.getElementById("resumenBox").innerHTML=`
 <h4>Resumen</h4>
+
 ${lista.join("<br>") || "—"}<br><br>
+
 ${u ? `<b>Logística:</b> $${log}<br><small>* Precio por día</small><br><br>`:""}
-Normal: $${normal.toFixed(2)}<br>
-MasGas: $${masgas.toFixed(2)}<br>
-<b style="color:#f97316;">Feria: $${feria.toFixed(2)}</b><br>
-<b style="color:green;">Ahorro: $${(normal-feria).toFixed(2)}</b>
+
+<b>Total normal:</b> $${normal.toFixed(2)}<br>
+<b>Total MasGas:</b> $${masgas.toFixed(2)}<br>
+<b style="color:#f97316;">Total feria:</b> $${feria.toFixed(2)}<br><br>
+
+<b style="color:#16a34a;">Ahorro:</b> $${(normal-feria).toFixed(2)}<br><br>
+
+<b style="font-size:12px;color:#6b7280;">Validez de la oferta: 10 días</b>
 `;
 }
 
@@ -196,62 +203,27 @@ alert("Selecciona al menos un servicio");return;
 next(2);
 }
 
-// FINALIZAR
-function finalizar(){
-
-let datos={
-razon:razon.value,
-ruc:ruc.value,
-contacto:contacto.value,
-direccion:direccion.value,
-telefono:telefono.value,
-correo:correo.value
-};
-
-generarPDF(datos);
-whatsapp(datos);
-}
-
 // PDF
-function generarPDF(d){
+function generarPDF(){
 const { jsPDF } = window.jspdf;
 const doc=new jsPDF();
 
 let txt=document.getElementById("resumenBox").innerText;
 
 doc.text("COTIZACIÓN PETROCHECK",10,10);
-
-doc.text(`Cliente: ${d.razon}`,10,20);
-doc.text(`RUC: ${d.ruc}`,10,25);
-doc.text(`Contacto: ${d.contacto}`,10,30);
-doc.text(`Dirección: ${d.direccion}`,10,35);
-doc.text(`Teléfono: ${d.telefono}`,10,40);
-doc.text(`Correo: ${d.correo}`,10,45);
-
-doc.text(txt,10,55);
+doc.text(txt,10,20);
 
 doc.save("cotizacion.pdf");
 }
 
 // WHATSAPP
-function whatsapp(d){
+function enviarWhatsApp(){
 let txt=document.getElementById("resumenBox").innerText;
-
-let msg=`COTIZACIÓN PETROCHECK
-
-${d.razon}
-${d.ruc}
-${d.contacto}
-${d.direccion}
-${d.telefono}
-${d.correo}
-
-${txt}`;
-
-window.open("https://wa.me/593XXXXXXXXX?text="+encodeURIComponent(msg));
+window.open("https://wa.me/593999300398?text="+encodeURIComponent(txt));
 }
 
 </script>
 
 </body>
 </html>
+
