@@ -1,389 +1,263 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>Cotizador Petrocheck PRO</title>
+<meta charset="UTF-8">
+<title>Cotizador Petrocheck</title>
 
-  <style>
-    body {
-      font-family: Arial;
-      background: #f4f4f4;
-      padding: 20px;
-    }
+<style>
 
-    h2 {
-      text-align: center;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: auto;
-    }
-
-    .servicio {
-      background: white;
-      padding: 15px;
-      margin: 10px 0;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-    }
-
-    .servicio input {
-      margin-right: 10px;
-    }
-
-    .precios {
-      font-size: 14px;
-      color: #555;
-    }
-
-    select, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-    }
-
-    button {
-      background: green;
-      color: white;
-      border: none;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .resultado {
-      background: #eaffea;
-      padding: 20px;
-      margin-top: 20px;
-      border-radius: 10px;
-    }
-  </style>
-</head>
-
-<body>
-
-<div class="container">
-
-<h2>💰 Cotizador Petrocheck</h2>
-
-<!-- SERVICIOS -->
-<div id="servicios">
-
-  <div class="servicio">
-    <input type="checkbox" value="102|120|150">
-    <b>Pruebas de hermeticidad en tanques</b>
-    <div class="precios">Normal: $150 | MasGas: $120 | Feria: $102</div>
-  </div>
-
-  <div class="servicio">
-    <input type="checkbox" value="63.75|75|90">
-    <b>Pruebas de hermeticidad en líneas</b>
-    <div class="precios">Normal: $90 | MasGas: $75 | Feria: $63.75</div>
-  </div>
-
-  <div class="servicio">
-    <input type="checkbox" value="59.5|70|85">
-    <b>Parámetros dimensionales</b>
-    <div class="precios">Normal: $85 | MasGas: $70 | Feria: $59.5</div>
-  </div>
-
-  <div class="servicio">
-    <input type="checkbox" value="59.5|70|85">
-    <b>Inspección técnica por medición de espesores</b>
-    <div class="precios">Normal: $85 | MasGas: $70 | Feria: $59.5</div>
-  </div>
-
-  <div class="servicio">
-    <input type="checkbox" value="382.5|450|460">
-    <b>Limpieza de tanque (hasta 12 mil galones)</b>
-    <div class="precios">Normal: $460 | MasGas: $450 | Feria: $382.5</div>
-  </div>
-
-  <div class="servicio">
-    <input type="checkbox" value="297.5|350|380">
-    <b>Capacidad 1 mil a 4 mil galones</b>
-    <div class="precios">Normal: $380 | MasGas: $350 | Feria: $297.5</div>
-  </div>
-
-  <div class="servicio">
-    <input type="checkbox" value="408|480|500">
-    <b>Calibración 5 mil a 12 mil galones</b>
-    <div class="precios">Normal: $500 | MasGas: $480 | Feria: $408</div>
-  </div>
-
-  <div class="servicio">
-    <input type="checkbox" value="365.5|430|490">
-    <b>Calibración líquida mayor (hasta 12 mil galones)</b>
-    <div class="precios">Normal: $490 | MasGas: $430 | Feria: $365.5</div>
-  </div>
-
-  <div class="servicio">
-    <input type="checkbox" value="153|180|200">
-    <b>Calibración pequeña</b>
-    <div class="precios">Normal: $200 | MasGas: $180 | Feria: $153</div>
-  </div>
-
-  <div class="servicio">
-    <input type="checkbox" value="127.5|150|190">
-    <b>Calibración adicional</b>
-    <div class="precios">Normal: $190 | MasGas: $150 | Feria: $127.5</div>
-  </div>
-
-  <div class="servicio">
-    <input type="checkbox" value="297.5|350|370">
-    <b>Memoria técnica</b>
-    <div class="precios">Normal: $370 | MasGas: $350 | Feria: $297.5</div>
-  </div>
-
-  <div class="servicio">
-    <input type="checkbox" value="63.75|75|90">
-    <b>Certificación de surtidores</b>
-    <div class="precios">Normal: $90 | MasGas: $75 | Feria: $63.75</div>
-  </div>
-
-  <div class="servicio">
-    <input type="checkbox" value="382.5|450|465">
-    <b>Cumplimiento normas INEN</b>
-    <div class="precios">Normal: $465 | MasGas: $450 | Feria: $382.5</div>
-  </div>
-
-
-<!-- ZONA -->
-<label>📍 Selecciona tu zona:</label>
-<select id="zona">
-  <option value="131">Zona 1 (1 día)</option>
-  <option value="131">Zona 2 (1 día)</option>
-  <option value="147">Zona 3 (3 días)</option>
-  <option value="131">Zona 4 (3 días)</option>
-  <option value="140">Zona 5 (3 días)</option>
-</select>
-
-<button onclick="calcular()">Calcular Cotización</button>
-
-<div class="resultado" id="resultado"></div>
-
-<button onclick="enviarWhatsApp()">📲 Enviar por WhatsApp</button>
-
-</div>
-
-<script>
-
-let totalFeria = 0;
-let totalNormal = 0;
-let totalMasgas = 0;
-let mensaje = "";
-
-function calcular() {
-
-  let checks = document.querySelectorAll("#servicios input:checked");
-
-  totalFeria = 0;
-  totalNormal = 0;
-  totalMasgas = 0;
-
-  checks.forEach(c => {
-    let datos = c.value.split("|");
-
-    totalFeria += parseFloat(datos[0]);
-    totalMasgas += parseFloat(datos[1]);
-    totalNormal += parseFloat(datos[2]);
-  });
-
-  let logistica = parseFloat(document.getElementById("zona").value);
-  let totalFinal = totalFeria + logistica;
-
-  mensaje =
-    "COTIZACIÓN PETROCHECK%0A" +
-    "Total Normal: $" + totalNormal + "%0A" +
-    "Total MasGas: $" + totalMasgas + "%0A" +
-    "Total Feria: $" + totalFeria + "%0A" +
-    "Logística: $" + logistica + "%0A" +
-    "TOTAL FINAL: $" + totalFinal;
-
-  document.getElementById("resultado").innerHTML =
-    "<b>Total Normal:</b> $" + totalNormal +
-    "<br><b>Total MasGas:</b> $" + totalMasgas +
-    "<br><b>💥 Total Feria:</b> $" + totalFeria +
-    "<br><b>Logística:</b> $" + logistica +
-    "<br><hr><b>💰 TOTAL FINAL:</b> $" + totalFinal;
-
+/* ===== PALETA PROFESIONAL ===== */
+:root{
+  --primary:#0b1f3a;
+  --secondary:#123d6b;
+  --accent:#00a86b;
+  --light:#f5f7fa;
+  --card:#ffffff;
+  --text:#1e293b;
 }
 
-function enviarWhatsApp() {
-  let numero = "593XXXXXXXXX";
-  window.open("https://wa.me/" + numero + "?text=" + mensaje);
+/* ===== BASE ===== */
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:var(--light);
+  color:var(--text);
 }
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Cotizador Petrocheck</title>
 
-  <style>
-    body {
-      font-family: Arial;
-      margin: 0;
-      background: #f8f9fa;
-    }
+/* ===== HEADER ===== */
+header{
+  background:linear-gradient(120deg,var(--primary),var(--secondary));
+  color:white;
+  padding:40px 20px;
+  text-align:center;
+  box-shadow:0 4px 15px rgba(0,0,0,0.2);
+}
 
-    header {
-      background: #0a2c4a;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
+header h1{
+  margin:0;
+  font-size:28px;
+  letter-spacing:1px;
+}
 
-    .container {
-      max-width: 1000px;
-      margin: auto;
-      padding: 20px;
-    }
+header p{
+  opacity:0.8;
+}
 
-    .card {
-      background: white;
-      padding: 15px;
-      margin-bottom: 10px;
-      border-radius: 10px;
-      border-left: 5px solid #0a2c4a;
-    }
+/* ===== CONTENEDOR ===== */
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:30px 20px;
+}
 
-    .precios {
-      font-size: 13px;
-      color: #666;
-    }
+/* ===== TITULOS ===== */
+h3{
+  margin-top:30px;
+  font-weight:600;
+}
 
-    select, button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-    }
+/* ===== GRID SERVICIOS ===== */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:18px;
+}
 
-    button {
-      background: #0a2c4a;
-      color: white;
-      border: none;
-      font-size: 16px;
-    }
+/* ===== TARJETAS ===== */
+.card{
+  background:var(--card);
+  border-radius:14px;
+  padding:18px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  transition:all 0.25s ease;
+  border:1px solid #e5e7eb;
+  position:relative;
+}
 
-    .resultado {
-      background: #e6f4ea;
-      padding: 20px;
-      margin-top: 20px;
-      border-radius: 10px;
-    }
-  </style>
+.card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 10px 25px rgba(0,0,0,0.12);
+}
+
+.card input{
+  transform:scale(1.2);
+  margin-right:8px;
+}
+
+.card b{
+  display:block;
+  margin-bottom:5px;
+}
+
+/* ===== PRECIOS ===== */
+.precios{
+  font-size:13px;
+  color:#64748b;
+}
+
+.precios span{
+  display:block;
+}
+
+/* ===== SELECT ===== */
+select{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #d1d5db;
+  margin-top:10px;
+  font-size:15px;
+}
+
+/* ===== BOTONES ===== */
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:10px;
+  font-size:16px;
+  font-weight:600;
+  margin-top:12px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.btn-primary{
+  background:var(--primary);
+  color:white;
+}
+
+.btn-primary:hover{
+  background:#08182d;
+}
+
+.btn-whatsapp{
+  background:#25D366;
+  color:white;
+}
+
+.btn-whatsapp:hover{
+  background:#1ebe5d;
+}
+
+/* ===== RESULTADO ===== */
+.resultado{
+  margin-top:25px;
+  background:white;
+  padding:25px;
+  border-radius:14px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.1);
+}
+
+.resultado h4{
+  margin-top:0;
+}
+
+.total{
+  font-size:24px;
+  font-weight:bold;
+  color:var(--accent);
+  margin-top:10px;
+}
+
+hr{
+  margin:15px 0;
+}
+
+</style>
 </head>
 
 <body>
 
 <header>
-  <h2>Cotizador de Servicios Petrocheck</h2>
-  <p>Certificando con calidad desde 1997</p>
+<h1>Cotizador Petrocheck</h1>
+<p>Servicios técnicos certificados para estaciones de servicio</p>
 </header>
 
 <div class="container">
 
 <h3>Selecciona los servicios:</h3>
 
-<div id="servicios">
+<div class="grid" id="servicios">
 
-  <div class="card">
-    <input type="checkbox" value="102|120|150">
-    Hermeticidad en tanques
-    <div class="precios">Normal: 150 | MasGas: 120 | Feria: 102</div>
-  </div>
+<div class="card"><label><input type="checkbox" value="102|120|150"><b>Hermeticidad en tanques</b></label><div class="precios"><span>Normal: $150</span><span>MasGas: $120</span><span>Feria: $102</span></div></div>
 
-  <div class="card">
-    <input type="checkbox" value="63.75|75|90">
-    Hermeticidad en líneas
-    <div class="precios">Normal: 90 | MasGas: 75 | Feria: 63.75</div>
-  </div>
+<div class="card"><label><input type="checkbox" value="63.75|75|90"><b>Hermeticidad en líneas</b></label><div class="precios"><span>Normal: $90</span><span>MasGas: $75</span><span>Feria: $63.75</span></div></div>
 
-  <div class="card">
-    <input type="checkbox" value="382.5|450|460">
-    Limpieza de tanque
-    <div class="precios">Normal: 460 | MasGas: 450 | Feria: 382.5</div>
-  </div>
+<div class="card"><label><input type="checkbox" value="59.5|70|85"><b>Parámetros dimensionales</b></label><div class="precios"><span>Normal: $85</span><span>MasGas: $70</span><span>Feria: $59.5</span></div></div>
+
+<div class="card"><label><input type="checkbox" value="382.5|450|460"><b>Limpieza de tanque</b></label><div class="precios"><span>Normal: $460</span><span>MasGas: $450</span><span>Feria: $382.5</span></div></div>
 
 </div>
 
 <h3>Ubicación:</h3>
 
 <select id="ciudad">
-  <option value="pichincha">Quito / Pichincha</option>
-  <option value="ambato">Ambato</option>
-  <option value="guayaquil">Guayaquil</option>
-  <option value="cuenca">Cuenca</option>
-  <option value="amazonia">Amazonía</option>
+<option value="pichincha">Quito / Pichincha</option>
+<option value="ambato">Ambato</option>
+<option value="guayaquil">Guayaquil</option>
+<option value="cuenca">Cuenca</option>
+<option value="amazonia">Amazonía</option>
 </select>
 
-<button onclick="calcular()">Calcular Cotización</button>
+<button class="btn-primary" onclick="calcular()">Calcular Cotización</button>
 
 <div class="resultado" id="resultado"></div>
 
-<button onclick="whatsapp()">Enviar por WhatsApp</button>
+<button class="btn-whatsapp" onclick="enviarWhatsApp()">Enviar por WhatsApp</button>
 
 </div>
 
 <script>
 
-// MAPEO CIUDAD → ZONA
-function obtenerLogistica(ciudad) {
-
-  if (ciudad == "pichincha") return 131; // zona 1
-  if (ciudad == "ambato") return 131; // zona 2
-  if (ciudad == "guayaquil") return 147; // zona 3
-  if (ciudad == "cuenca") return 131; // zona 4
-  if (ciudad == "amazonia") return 140; // zona 5
-
+function obtenerLogistica(ciudad){
+if(ciudad=="pichincha") return 131;
+if(ciudad=="ambato") return 131;
+if(ciudad=="guayaquil") return 147;
+if(ciudad=="cuenca") return 131;
+if(ciudad=="amazonia") return 140;
 }
 
-let mensaje = "";
+let mensaje="";
 
-function calcular() {
+function calcular(){
 
-  let checks = document.querySelectorAll("#servicios input:checked");
+let checks=document.querySelectorAll("#servicios input:checked");
 
-  let totalFeria = 0;
-  let totalNormal = 0;
-  let totalMasgas = 0;
+let normal=0,masgas=0,feria=0;
 
-  checks.forEach(c => {
-    let datos = c.value.split("|");
-    totalFeria += parseFloat(datos[0]);
-    totalMasgas += parseFloat(datos[1]);
-    totalNormal += parseFloat(datos[2]);
-  });
+checks.forEach(c=>{
+let d=c.value.split("|");
+feria+=parseFloat(d[0]);
+masgas+=parseFloat(d[1]);
+normal+=parseFloat(d[2]);
+});
 
-  let ciudad = document.getElementById("ciudad").value;
-  let logistica = obtenerLogistica(ciudad);
+let ciudad=document.getElementById("ciudad").value;
+let logistica=obtenerLogistica(ciudad);
+let total=feria+logistica;
 
-  let totalFinal = totalFeria + logistica;
+mensaje="COTIZACIÓN PETROCHECK%0A"+
+"Total Normal: $"+normal+"%0A"+
+"Total MasGas: $"+masgas+"%0A"+
+"Total Feria: $"+feria+"%0A"+
+"Logística: $"+logistica+"%0A"+
+"TOTAL FINAL: $"+total;
 
-  mensaje =
-    "COTIZACIÓN PETROCHECK%0A" +
-    "Total Normal: $" + totalNormal + "%0A" +
-    "Total MasGas: $" + totalMasgas + "%0A" +
-    "Total Feria: $" + totalFeria + "%0A" +
-    "Logística: $" + logistica + "%0A" +
-    "TOTAL FINAL: $" + totalFinal;
-
-  document.getElementById("resultado").innerHTML =
-    "<b>Total Normal:</b> $" + totalNormal +
-    "<br><b>Total MasGas:</b> $" + totalMasgas +
-    "<br><b>Total Feria:</b> $" + totalFeria +
-    "<br><b>Logística:</b> $" + logistica +
-    "<br><hr><b>TOTAL FINAL:</b> $" + totalFinal;
-
+document.getElementById("resultado").innerHTML=
+"<h4>Resumen de Cotización</h4>"+
+"Normal: $"+normal+
+"<br>MasGas: $"+masgas+
+"<br><b>Feria: $"+feria+"</b>"+
+"<hr>Logística: $"+logistica+
+"<div class='total'>TOTAL: $"+total+"</div>";
 }
 
-function whatsapp() {
-  let numero = "593XXXXXXXXX";
-  window.open("https://wa.me/" + numero + "?text=" + mensaje);
+function enviarWhatsApp(){
+let numero="59399930098";
+window.open("https://wa.me/"+numero+"?text="+mensaje);
 }
 
-</script>
-
-</body>
-</html>
 </script>
 
 </body>
