@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,77 +7,111 @@
 
 <style>
 :root{
-  --negro:#121212;
-  --gris:#f5f5f5;
+  --negro:#0d0d0d;
+  --gris:#f4f6f8;
   --naranja:#ff6a00;
+  --texto:#2c2c2c;
 }
 
 body{
   margin:0;
   font-family:'Segoe UI',sans-serif;
   background:var(--gris);
+  color:var(--texto);
 }
 
 /* HEADER */
 header{
-  background:#111;
+  background:linear-gradient(90deg,#0d0d0d,#1a1a1a);
   padding:25px;
   text-align:center;
+  box-shadow:0 4px 15px rgba(0,0,0,0.2);
 }
 
 .logo{
-  width:220px;
+  width:200px;
 }
 
 /* CONTENEDOR */
 .container{
   max-width:1200px;
   margin:auto;
-  padding:20px;
+  padding:30px 20px;
 }
 
-/* PASOS */
-.step{display:none;}
-.active{display:block;}
+/* TITULOS */
+h2{
+  margin-bottom:15px;
+}
 
 /* GRID */
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
   gap:20px;
 }
 
 /* TARJETAS */
 .card{
   background:white;
-  border-radius:12px;
+  border-radius:14px;
   overflow:hidden;
-  box-shadow:0 5px 15px rgba(0,0,0,0.1);
-  padding:15px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+  transition:all 0.25s ease;
+  border:1px solid #eee;
+}
+
+.card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 12px 25px rgba(0,0,0,0.15);
 }
 
 .card img{
   width:100%;
-  height:140px;
+  height:150px;
   object-fit:cover;
-  border-radius:8px;
+}
+
+.card-content{
+  padding:15px;
 }
 
 /* PRECIOS */
-.normal{text-decoration:line-through;color:#888;}
-.masgas{text-decoration:line-through;color:#aaa;}
-.feria{color:var(--naranja);font-weight:bold;}
+.normal{
+  text-decoration:line-through;
+  color:#999;
+  font-size:13px;
+}
+
+.masgas{
+  text-decoration:line-through;
+  color:#bbb;
+  font-size:13px;
+}
+
+.feria{
+  color:var(--naranja);
+  font-weight:bold;
+  font-size:16px;
+  margin-top:5px;
+}
 
 /* INPUT */
 input{
   width:100%;
   padding:12px;
   margin-top:10px;
-  border-radius:8px;
-  border:1px solid #ccc;
+  border-radius:10px;
+  border:1px solid #ddd;
+  transition:0.2s;
 }
 
-/* BOTÓN */
+input:focus{
+  border-color:var(--naranja);
+  outline:none;
+}
+
+/* BOTONES */
 button{
   width:100%;
   padding:14px;
@@ -86,7 +121,13 @@ button{
   background:var(--naranja);
   color:white;
   font-size:16px;
+  font-weight:600;
   cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  background:#e65c00;
 }
 
 /* TOTAL */
@@ -94,14 +135,17 @@ button{
   position:fixed;
   bottom:20px;
   right:20px;
-  background:#111;
+  background:linear-gradient(135deg,#111,#222);
   color:white;
-  padding:15px;
-  border-radius:10px;
+  padding:18px;
+  border-radius:12px;
+  font-size:18px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.3);
 }
 
+/* ERRORES */
 .error{
-  color:red;
+  color:#d32f2f;
   font-size:13px;
 }
 </style>
@@ -115,50 +159,15 @@ button{
 
 <div class="container">
 
-<!-- PASO 1 -->
-<div class="step active" id="step1">
 <h2>Selecciona los servicios</h2>
 
 <div class="grid">
 
-<!-- 1 -->
+<!-- SERVICIO EJEMPLO -->
 <div class="card">
 <img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Oil_storage_tanks.jpg">
 <div class="card-content">
-<input type="checkbox" value="102|120|150">
-<b>Pruebas de hermeticidad en tanques</b>
-<div class="normal">Normal $150</div>
-<div class="masgas">MasGas $120</div>
-<div class="feria">Feria $102</div>
-</div>
-</div>
-
-<!-- 2 -->
-<div class="card">
-<img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Pipeline.jpg">
-<div class="card-content">
-<input type="checkbox" value="63.75|75|90">
-<b>Pruebas de hermeticidad en líneas</b>
-<div class="normal">Normal $90</div>
-<div class="masgas">MasGas $75</div>
-<div class="feria">Feria $63.75</div>
-</div>
-</div>
-
-<!-- 3 -->
-<div class="card">
-<img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Inspection_work.jpg">
-<div class="card-content">
-<input type="checkbox" value="59.5|70|85">
-<b>Parámetros dimensionales</b>
-<div class="normal">$85</div>
-<div class="masgas">$70</div><div class="grid">
-
-<!-- 1 -->
-<div class="card">
-<img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Oil_storage_tanks.jpg">
-<div class="card-content">
-<input type="checkbox" value="102|120|150">
+<input type="checkbox" value="102">
 <b>Pruebas de hermeticidad en tanques</b>
 <div class="normal">Precio normal: $150</div>
 <div class="masgas">Precio cliente MasGas: $120</div>
@@ -166,180 +175,20 @@ button{
 </div>
 </div>
 
-<!-- 2 -->
-<div class="card">
-<img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Pipeline.jpg">
-<div class="card-content">
-<input type="checkbox" value="63.75|75|90">
-<b>Pruebas de hermeticidad en líneas</b>
-<div class="normal">Precio normal: $90</div>
-<div class="masgas">Precio cliente MasGas: $75</div>
-<div class="feria">Precio feria: $63.75</div>
-</div>
-</div>
+<!-- DUPLICA ESTE BLOQUE PARA LOS DEMÁS SERVICIOS -->
 
-<!-- 3 -->
-<div class="card">
-<img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Inspection_work.jpg">
-<div class="card-content">
-<input type="checkbox" value="59.5|70|85">
-<b>Parámetros dimensionales</b>
-<div class="normal">Precio normal: $85</div>
-<div class="masgas">Precio cliente MasGas: $70</div>
-<div class="feria">Precio feria: $59.5</div>
-</div>
-</div>
-
-<!-- 4 -->
-<div class="card">
-<img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Inspection_work.jpg">
-<div class="card-content">
-<input type="checkbox" value="59.5|70|85">
-<b>Inspección técnica por medición de espesores</b>
-<div class="normal">Precio normal: $85</div>
-<div class="masgas">Precio cliente MasGas: $70</div>
-<div class="feria">Precio feria: $59.5</div>
-</div>
-</div>
-
-<!-- 5 -->
-<div class="card">
-<img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Tank_cleaning.jpg">
-<div class="card-content">
-<input type="checkbox" value="382.5|450|460">
-<b>Limpieza de tanque (hasta 12 mil galones)</b>
-<div class="normal">Precio normal: $460</div>
-<div class="masgas">Precio cliente MasGas: $450</div>
-<div class="feria">Precio feria: $382.5</div>
-</div>
-</div>
-
-<!-- 6 -->
-<div class="card">
-<img src="https://upload.wikimedia.org/wikipedia/commons/1/1c/Calibration_equipment.jpg">
-<div class="card-content">
-<input type="checkbox" value="297.5|350|380">
-<b>Capacidad 1 mil a 4 mil galones</b>
-<div class="normal">Precio normal: $380</div>
-<div class="masgas">Precio cliente MasGas: $350</div>
-<div class="feria">Precio feria: $297.5</div>
-</div>
-</div>
-
-<!-- 7 -->
-<div class="card">
-<img src="https://upload.wikimedia.org/wikipedia/commons/1/1c/Calibration_equipment.jpg">
-<div class="card-content">
-<input type="checkbox" value="408|480|500">
-<b>Calibración 5 mil a 12 mil galones</b>
-<div class="normal">Precio normal: $500</div>
-<div class="masgas">Precio cliente MasGas: $480</div>
-<div class="feria">Precio feria: $408</div>
-</div>
-</div>
-
-<!-- 8 -->
-<div class="card">
-<img src="https://upload.wikimedia.org/wikipedia/commons/1/1c/Calibration_equipment.jpg">
-<div class="card-content">
-<input type="checkbox" value="365.5|430|490">
-<b>Calibración líquida mayor (hasta 12 mil galones)</b>
-<div class="normal">Precio normal: $490</div>
-<div class="masgas">Precio cliente MasGas: $430</div>
-<div class="feria">Precio feria: $365.5</div>
-</div>
-</div>
-
-<!-- 9 -->
-<div class="card">
-<img src="https://upload.wikimedia.org/wikipedia/commons/1/1c/Calibration_equipment.jpg">
-<div class="card-content">
-<input type="checkbox" value="153|180|200">
-<b>Calibración pequeña</b>
-<div class="normal">Precio normal: $200</div>
-<div class="masgas">Precio cliente MasGas: $180</div>
-<div class="feria">Precio feria: $153</div>
-</div>
-</div>
-
-<!-- 10 -->
-<div class="card">
-<img src="https://upload.wikimedia.org/wikipedia/commons/1/1c/Calibration_equipment.jpg">
-<div class="card-content">
-<input type="checkbox" value="127.5|150|190">
-<b>Calibración adicional</b>
-<div class="normal">Precio normal: $190</div>
-<div class="masgas">Precio cliente MasGas: $150</div>
-<div class="feria">Precio feria: $127.5</div>
-</div>
-</div>
-
-<!-- 11 -->
-<div class="card">
-<img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Inspection_work.jpg">
-<div class="card-content">
-<input type="checkbox" value="297.5|350|370">
-<b>Memoria técnica</b>
-<div class="normal">Precio normal: $370</div>
-<div class="masgas">Precio cliente MasGas: $350</div>
-<div class="feria">Precio feria: $297.5</div>
-</div>
-</div>
-
-<!-- 12 -->
-<div class="card">
-<img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Pipeline.jpg">
-<div class="card-content">
-<input type="checkbox" value="63.75|75|90">
-<b>Certificación de surtidores</b>
-<div class="normal">Precio normal: $90</div>
-<div class="masgas">Precio cliente MasGas: $75</div>
-<div class="feria">Precio feria: $63.75</div>
-</div>
-</div>
-
-<!-- 13 -->
-<div class="card">
-<img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Oil_storage_tanks.jpg">
-<div class="card-content">
-<input type="checkbox" value="382.5|450|465">
-<b>Cumplimiento normas INEN</b>
-<div class="normal">Precio normal: $465</div>
-<div class="masgas">Precio cliente MasGas: $450</div>
-<div class="feria">Precio feria: $382.5</div>
-</div>
-</div>
-
-</div>
 </div>
 
 <div class="error" id="errorServicios"></div>
 
 <button onclick="validarServicios()">Siguiente</button>
-</div>
 
-<!-- PASO 2 -->
-<div class="step" id="step2">
 <h2>Ubicación</h2>
-<input id="ubicacion" placeholder="Ingrese ciudad" required>
-<div class="error" id="errorUbicacion"></div>
+<input id="ubicacion" placeholder="Ingrese ciudad">
 
-<button onclick="validarUbicacion()">Siguiente</button>
-</div>
-
-<!-- PASO 3 -->
-<div class="step" id="step3">
 <h2>Datos</h2>
-
 <input id="razon" placeholder="Razón Social">
-<input id="ruc" placeholder="RUC">
 <input id="telefono" placeholder="Teléfono">
-<input id="correo" placeholder="Correo">
-
-<div class="error" id="errorDatos"></div>
-
-<button onclick="calcular()">Finalizar</button>
-</div>
 
 </div>
 
@@ -357,42 +206,14 @@ total+=parseFloat(c.value);
 document.getElementById("total").innerText=total;
 }
 
-document.querySelectorAll("input[type=checkbox]").forEach(c=>{
-c.addEventListener("change",actualizarTotal);
-});
+document.addEventListener("change",actualizarTotal);
 
-/* VALIDACIONES */
 function validarServicios(){
 if(document.querySelectorAll("input:checked").length==0){
 document.getElementById("errorServicios").innerText="Seleccione al menos un servicio";
 return;
 }
-next(2);
-}
-
-function validarUbicacion(){
-if(document.getElementById("ubicacion").value==""){
-document.getElementById("errorUbicacion").innerText="Ingrese ubicación";
-return;
-}
-next(3);
-}
-
-function calcular(){
-
-if(document.getElementById("razon").value=="" ||
-document.getElementById("telefono").value==""){
-document.getElementById("errorDatos").innerText="Complete los datos";
-return;
-}
-
-let total=parseFloat(document.getElementById("total").innerText);
-alert("TOTAL FINAL: $" + total);
-}
-
-function next(n){
-document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
-document.getElementById("step"+n).classList.add("active");
+alert("OK");
 }
 
 </script>
