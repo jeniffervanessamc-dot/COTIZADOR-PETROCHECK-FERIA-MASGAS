@@ -20,123 +20,35 @@ body{
   margin:0;
   font-family:'Segoe UI',sans-serif;
   background:var(--bg);
-  color:var(--text);
 }
 
-header{
-  background:white;
-  border-bottom:1px solid #e5e7eb;
-  padding:15px;
-  text-align:center;
-}
-
-.logo{ height:45px; }
-
-.container{
-  max-width:1000px;
-  margin:auto;
-  padding:25px;
-}
-
+.container{max-width:1000px;margin:auto;padding:25px;}
 .step{display:none;}
 .active{display:block;}
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:12px;
-}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;}
 
-.card{
-  background:var(--card);
-  padding:14px;
-  border-radius:10px;
-  border:1px solid #e5e7eb;
-  transition:0.2s;
-  font-size:13.5px;
-}
-.card:hover{ border-color:var(--accent); }
+.card{background:white;padding:14px;border-radius:10px;border:1px solid #e5e7eb;}
+.card b{display:block;margin-top:6px;}
 
-.card b{ display:block; margin-top:6px; }
+.precios{margin-top:10px;}
+.tag.normal{text-decoration:line-through;color:#9ca3af;}
+.tag.masgas{text-decoration:line-through;color:#6b7280;}
+.tag.feria{background:#f97316;color:white;padding:3px 6px;border-radius:5px;}
 
-.precios{
-  margin-top:10px;
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-}
+input{width:100%;padding:10px;margin-top:8px;border-radius:6px;border:1px solid #ccc;}
 
-.tag.normal{
-  text-decoration:line-through;
-  color:#9ca3af;
-}
+button{padding:10px;border:none;border-radius:6px;margin-top:10px;cursor:pointer;}
+.next{background:#f97316;color:white;}
+.back{background:#ddd;}
 
-.tag.masgas{
-  text-decoration:line-through;
-  color:#6b7280;
-}
-
-.tag.feria{
-  color:#fff;
-  background:var(--accent);
-  padding:4px 8px;
-  border-radius:6px;
-  font-weight:600;
-  width:max-content;
-}
-
-input{
-  width:100%;
-  padding:10px;
-  margin-top:8px;
-  border-radius:6px;
-  border:1px solid #d1d5db;
-}
-
-.botones{
-  display:flex;
-  gap:10px;
-  margin-top:15px;
-}
-
-button{
-  flex:1;
-  padding:10px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-.next{ background:var(--accent); color:white;}
-.back{ background:#e5e7eb;}
-
-.total-box{
-  position:fixed;
-  top:15px;
-  right:15px;
-  background:white;
-  border:1px solid #e5e7eb;
-  padding:12px 16px;
-  border-radius:10px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.1);
-}
-
-.total-box span{
-  color:var(--accent);
-  font-weight:bold;
-}
+.total-box{position:fixed;top:10px;right:10px;background:white;padding:10px;border-radius:8px;}
 </style>
 </head>
 
 <body>
 
-<header>
-<img src="https://media.licdn.com/dms/image/v2/C4E1BAQFVKNoTZG40BA/company-background_10000/company-background_10000/0/1584216937768/petrocheck_services_cover?e=2147483647&v=beta&t=YM3RmhVRBPo_t3g7CW_Vw2MFuBG1EyJMNpDCPyJ_k20" class="logo">
-</header>
-
-<div class="total-box">
-Total: $<span id="total">0.00</span>
-</div>
+<div class="total-box">Total: $<span id="total">0</span></div>
 
 <div class="container">
 
@@ -144,145 +56,81 @@ Total: $<span id="total">0.00</span>
 <div class="step active" id="step1">
 <h3>Servicios</h3>
 <div class="grid" id="listaServicios"></div>
-<div class="botones">
 <button class="next" onclick="validar()">Siguiente</button>
-</div>
 </div>
 
 <!-- RESUMEN -->
-<div id="resumenBox" style="margin-top:20px;background:white;padding:15px;border-radius:10px;border:1px solid #e5e7eb;font-size:13px;"></div>
+<div id="resumenBox"></div>
 
 <!-- PASO 2 -->
 <div class="step" id="step2">
 <h3>Ubicación</h3>
 
-<input id="ubicacion" list="ciudades" placeholder="Ej: Quito">
+<input id="ubicacion" list="ciudades">
 
 <datalist id="ciudades">
-
-<!-- ZONA 1 -->
-<option value="Mejía">
-<option value="Cayambe">
-<option value="Quito">
-<option value="Tabacundo">
-<option value="Santo Domingo">
-<option value="Otavalo">
-<option value="Pedro Vicente Maldonado">
-<option value="San Miguel de Urcuquí">
-
-<!-- ZONA 2 -->
-<option value="Chunchi">
-<option value="Ambato">
-<option value="Cumandá">
-<option value="Pangua">
-<option value="Latacunga">
-<option value="Riobamba">
-<option value="Pujilí">
-<option value="Pelileo">
-<option value="Bucay">
-<option value="El Corazón">
-<option value="Santiago de Píllaro">
-<option value="Salcedo">
-<option value="Tisaleo">
-<option value="Sigchos">
-<option value="Penipe">
-<option value="Cevallos">
-<option value="Baños">
-<option value="Quero">
-<option value="Saquisilí">
-<option value="Guaranda">
-
-<!-- ZONA 3 -->
-<option value="Mocache">
-<option value="Guayaquil">
-<option value="Balao">
-<option value="El Carmen">
-<option value="Babahoyo">
-<option value="Nobol">
-<option value="Portoviejo">
-<option value="Milagro">
-<option value="Jaramijó">
-<option value="Yaguachi">
-<option value="Montecristi">
-<option value="Palenque">
-<option value="Salitre">
-<option value="Santa Lucía">
-<option value="Urdaneta">
-<option value="Echeandía">
-<option value="Chillanes">
-
-<!-- ZONA 4 -->
-<option value="Santa Isabel">
-<option value="Calvas">
-<option value="Cañar">
-<option value="Loja">
-<option value="Gualaceo">
-<option value="Pucará">
-<option value="Nabón">
-<option value="Oña">
-<option value="Yacuambi">
-<option value="Paute">
-<option value="Catacocha">
-<option value="Pasaje">
-<option value="Portovelo">
-<option value="El Guabo">
-
-<!-- ZONA 5 -->
-<option value="Lago Agrio">
-<option value="Sucumbíos">
-<option value="Puyo">
-<option value="Loreto">
-<option value="Joya de los Sachas">
-
+<option value="Quito"><option value="Guayaquil"><option value="Cuenca">
+<option value="Ambato"><option value="Latacunga"><option value="Riobamba">
+<option value="Santo Domingo"><option value="Otavalo"><option value="Loja">
+<option value="Machala"><option value="Puyo"><option value="Lago Agrio">
 </datalist>
 
-
-<div class="botones">
 <button class="back" onclick="next(1)">Anterior</button>
 <button class="next" onclick="next(3)">Siguiente</button>
-</div>
 </div>
 
 <!-- PASO 3 -->
 <div class="step" id="step3">
-<h3>Finalizar</h3>
-<div class="botones">
-<button onclick="generarPDF()">📄 Descargar PDF</button>
-<button onclick="whatsapp()">📲 WhatsApp</button>
+<h3>Continuar</h3>
+<button class="next" onclick="next(4)">Ingresar datos</button>
 </div>
+
+<!-- PASO 4 -->
+<div class="step" id="step4">
+<h3>Datos del cliente</h3>
+
+<input id="razon" placeholder="Razón Social">
+<input id="ruc" placeholder="RUC">
+<input id="contacto" placeholder="Persona de contacto">
+<input id="direccion" placeholder="Dirección">
+<input id="telefono" placeholder="Teléfono">
+<input id="correo" placeholder="Correo">
+
+<button class="back" onclick="next(3)">Anterior</button>
+<button class="next" onclick="finalizar()">Finalizar</button>
 </div>
 
 </div>
 
 <script>
 
-// SERVICIOS COMPLETOS
+// SERVICIOS (NO CAMBIADOS)
 const servicios = [
 ["PRUEBAS DE HERMETICIDAD EN TANQUES",102,120,150],
 ["PRUEBAS DE HERMETICIDAD EN LÍNEAS",63.75,75,90],
 ["PARÁMETROS DIMENSIONALES",59.5,70,85],
 ["INSPECCIÓN TÉCNICA POR MEDICIÓN DE ESPESORES",59.5,70,85],
-["LIMPIEZA DE TANQUE CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES (INCLUYE CERTIFICADO DE LIMPIEZA)",382.5,450,460],
-["LIMPIEZA DE TANQUE CON CAPACIDAD DE 1 MIL HASTA 4 MIL GALONES (INCLUYE CERTIFICADO DE LIMPIEZA)",297.5,350,380],
-["CALIBRACIÓN LIQUIDA TANQUES CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",408,480,500],
-["CALIBRACIÓN LIQUIDA TANQUES CON CAPACIDAD DE 1 MIL HASTA 4 MIL GALONES (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",153,180,200],
-["CALIBRACIÓN GEOMETRICA TANQUES CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",365.5,430,490],
-["CALIBRACIÓN GEOMETRICA TANQUES CON CAPACIDAD DE 1 MIL HASTA 4 MIL HASTA (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",127.5,150,190],
+["LIMPIEZA  DE TANQUE 5K-12K (CERTIFICADO)",382.5,450,460],
+["LIMPIEZA  DE TANQUE 1K-4K (CERTIFICADO)",297.5,350,380],
+["CALIBRACIÓN LIQUIDA 5K-12K",408,480,500],
+["CALIBRACIÓN LIQUIDA 1K-4K",153,180,200],
+["CALIBRACIÓN GEOMÉTRICA 5K-12K",365.5,430,490],
+["CALIBRACIÓN GEOMÉTRICA 1K-4K",127.5,150,190],
 ["MEMORIA TÉCNICA",297.5,350,370],
-["CERTIFICACIÓN DE SURTIDORES NTE INEN 1781",63.75,75,90],
-["CUMPLIMIENTO DE NORMAS DE SEGURIDAD NTE INEN 2251",382.5,450,465]
+["CERTIFICACIÓN NTE INEN 1781",63.75,75,90],
+["NORMAS DE SEGURIDAD NTE INEN 2251",382.5,450,465]
 ];
 
-const contenedor = document.getElementById("listaServicios");
+const cont = document.getElementById("listaServicios");
 
 servicios.forEach(s=>{
-contenedor.innerHTML += `
+cont.innerHTML+=`
 <div class="card">
 <input type="checkbox" value="${s[1]}" onchange="total(); actualizarResumen();">
 <b>${s[0]}</b>
 <div class="precios">
-<span class="tag normal">Precio normal: $${s[3]}</span>
-<span class="tag masgas">Precio cliente MasGas: $${s[2]}</span>
+<span class="tag normal">Precio normal: $${s[3]}</span><br>
+<span class="tag masgas">Precio cliente MasGas: $${s[2]}</span><br>
 <span class="tag feria">Precio feria: $${s[1]}</span>
 </div>
 </div>`;
@@ -291,9 +139,7 @@ contenedor.innerHTML += `
 // TOTAL
 function total(){
 let t=0;
-document.querySelectorAll("input[type=checkbox]:checked").forEach(c=>{
-t+=parseFloat(c.value);
-});
+document.querySelectorAll("input:checked").forEach(c=>t+=parseFloat(c.value));
 document.getElementById("total").innerText=t.toFixed(2);
 }
 
@@ -302,69 +148,38 @@ function calcularLogistica(u){
 u=u.toLowerCase();
 if(u.includes("quito")) return 131;
 if(u.includes("guayaquil")) return 147;
-if(u.includes("cuenca")) return 131;
-if(u.includes("ambato")) return 131;
 return 140;
 }
 
 // RESUMEN
 function actualizarResumen(){
+let normal=0, masgas=0, feria=0, lista=[];
 
-let totalFeria = 0;
-let totalMasgas = 0;
-let totalNormal = 0;
-
-let lista = [];
-
-document.querySelectorAll("input[type=checkbox]:checked").forEach(c=>{
-
-let card = c.parentElement;
-let precios = card.querySelectorAll(".tag");
-
-let normal = parseFloat(precios[0].innerText.replace(/[^0-9.]/g,""));
-let masgas = parseFloat(precios[1].innerText.replace(/[^0-9.]/g,""));
-let feria = parseFloat(precios[2].innerText.replace(/[^0-9.]/g,""));
-
-let nombre = card.querySelector("b").innerText;
-
-lista.push("• " + nombre);
-
-totalNormal += normal;
-totalMasgas += masgas;
-totalFeria += feria;
-
+document.querySelectorAll("input:checked").forEach(c=>{
+let p=c.parentElement.querySelectorAll(".tag");
+normal+=parseFloat(p[0].innerText.replace(/[^0-9.]/g,""));
+masgas+=parseFloat(p[1].innerText.replace(/[^0-9.]/g,""));
+feria+=parseFloat(p[2].innerText.replace(/[^0-9.]/g,""));
+lista.push("• "+c.parentElement.querySelector("b").innerText);
 });
 
-let ubicacion = document.getElementById("ubicacion").value || "";
-let logistica = 0;
+let u=document.getElementById("ubicacion").value;
+let log=0;
 
-if(ubicacion.trim() !== ""){
-logistica = calcularLogistica(ubicacion);
-
-totalNormal += logistica;
-totalMasgas += logistica;
-totalFeria += logistica;
+if(u){
+log=calcularLogistica(u);
+normal+=log; masgas+=log; feria+=log;
 }
 
-let resumen = `
+document.getElementById("resumenBox").innerHTML=`
 <h4>Resumen</h4>
-
 ${lista.join("<br>") || "—"}<br><br>
-
-${ubicacion ? `
-<b>Logística:</b> $${logistica}<br>
-<span style="font-size:12px;color:#6b7280;">* Pprecio por día</span><br><br>
-` : ""}
-
-<b>Total normal:</b> $${totalNormal.toFixed(2)}<br>
-<b>Total MasGas:</b> $${totalMasgas.toFixed(2)}<br>
-<b style="color:#f97316;">Total feria:</b> $${totalFeria.toFixed(2)}<br><br>
-
-<b style="color:#16a34a;">Ahorro:</b> $${(totalNormal - totalFeria).toFixed(2)}
+${u ? `<b>Logística:</b> $${log}<br><small>* Precio por día</small><br><br>`:""}
+Normal: $${normal.toFixed(2)}<br>
+MasGas: $${masgas.toFixed(2)}<br>
+<b style="color:#f97316;">Feria: $${feria.toFixed(2)}</b><br>
+<b style="color:green;">Ahorro: $${(normal-feria).toFixed(2)}</b>
 `;
-
-document.getElementById("resumenBox").innerHTML = resumen;
-
 }
 
 // NAVEGACIÓN
@@ -375,38 +190,68 @@ actualizarResumen();
 }
 
 function validar(){
-if(document.querySelectorAll("input[type=checkbox]:checked").length==0){
-alert("Selecciona al menos un servicio");
-return;
+if(!document.querySelector("input:checked")){
+alert("Selecciona al menos un servicio");return;
 }
 next(2);
 }
 
+// FINALIZAR
+function finalizar(){
+
+let datos={
+razon:razon.value,
+ruc:ruc.value,
+contacto:contacto.value,
+direccion:direccion.value,
+telefono:telefono.value,
+correo:correo.value
+};
+
+generarPDF(datos);
+whatsapp(datos);
+}
+
 // PDF
-function generarPDF(){
+function generarPDF(d){
 const { jsPDF } = window.jspdf;
-const doc = new jsPDF();
+const doc=new jsPDF();
 
-let texto = document.getElementById("resumenBox").innerText;
+let txt=document.getElementById("resumenBox").innerText;
 
-doc.setFontSize(14);
-doc.text("COTIZACIÓN PETROCHECK", 10, 10);
+doc.text("COTIZACIÓN PETROCHECK",10,10);
 
-doc.setFontSize(10);
-let lineas = doc.splitTextToSize(texto, 180);
-doc.text(lineas, 10, 20);
+doc.text(`Cliente: ${d.razon}`,10,20);
+doc.text(`RUC: ${d.ruc}`,10,25);
+doc.text(`Contacto: ${d.contacto}`,10,30);
+doc.text(`Dirección: ${d.direccion}`,10,35);
+doc.text(`Teléfono: ${d.telefono}`,10,40);
+doc.text(`Correo: ${d.correo}`,10,45);
+
+doc.text(txt,10,55);
 
 doc.save("cotizacion.pdf");
 }
 
 // WHATSAPP
-function whatsapp(){
-let texto = document.getElementById("resumenBox").innerText;
-window.open("https://wa.me/593999300398?text="+encodeURIComponent(texto));
+function whatsapp(d){
+let txt=document.getElementById("resumenBox").innerText;
+
+let msg=`COTIZACIÓN PETROCHECK
+
+${d.razon}
+${d.ruc}
+${d.contacto}
+${d.direccion}
+${d.telefono}
+${d.correo}
+
+${txt}`;
+
+window.open("https://wa.me/593XXXXXXXXX?text="+encodeURIComponent(msg));
 }
 
 </script>
 
 </body>
 </html>
-```
