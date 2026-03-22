@@ -20,8 +20,7 @@ body{margin:0;font-family:'Segoe UI';background:var(--bg);}
 .step{display:none;} .active{display:block;}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;}
 
-.card{background:white;padding:14px;border-radius:10px;border:1px solid #e5e7eb;}
-.card b{display:block;margin-top:6px;}
+/* 🔥 GRID MÁS ORDENADO */ .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; align-items:stretch; /* 🔥 clave */ } /* 🔥 CARD ARMONIZADA */ .card{ background:white; padding:14px; border-radius:10px; border:1px solid #e5e7eb; display:flex; flex-direction:column; justify-content:space-between; height:100%; min-height:230px; /* 🔥 ajusta aquí si quieres más alto */ } /* 🔥 CHECKBOX CENTRADO */ .card input[type="checkbox"]{ align-self:center; margin-bottom:8px; } /* 🔥 TITULO CONTROLADO */ .card b{ display:block; margin-top:6px; min-height:60px; /* 🔥 iguala todos */ } /* 🔥 PRECIOS ABAJO */ .precios{ margin-top:auto; }
 
 .tag.normal{text-decoration:line-through;color:#9ca3af;}
 .tag.masgas{text-decoration:line-through;color:#6b7280;}
