@@ -1,35 +1,96 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Cotizador</title>
+  <title>Cotizador Petrocheck</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      padding: 30px;
+      background: #f5f5f5;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    button {
+      background: green;
+      color: white;
+      border: none;
+      font-size: 16px;
+    }
+
+    .resultado {
+      margin-top: 20px;
+      background: #eaffea;
+      padding: 15px;
+      border-radius: 8px;
+    }
+  </style>
 </head>
+
 <body>
 
-<h2>Cotizador de Servicios</h2>
+<div class="box">
 
-<select id="paquete">
-  <option value="100">Básico - $100</option>
-  <option value="200">Intermedio - $200</option>
-  <option value="300">Completo - $300</option>
+<h2>💰 Cotizador Petrocheck</h2>
+
+<label>Selecciona servicio:</label>
+
+<select id="servicio">
+  <option value="102|150">Hermeticidad en tanques</option>
+  <option value="63.75|90">Hermeticidad en líneas</option>
+  <option value="59.5|85">Parámetros dimensionales</option>
+  <option value="59.5|85">Inspección técnica</option>
+  <option value="382.5|460">Limpieza de tanque</option>
+  <option value="297.5|380">Capacidad 1k - 4k gal</option>
+  <option value="408|500">Calibración 5k - 12k gal</option>
+  <option value="365.5|490">Calibración mayor</option>
+  <option value="153|200">Calibración pequeña</option>
+  <option value="127.5|190">Otra calibración</option>
+  <option value="297.5|370">Memoria técnica</option>
+  <option value="63.75|90">Certificación surtidores</option>
+  <option value="382.5|465">Cumplimiento INEN</option>
 </select>
 
-<br><br>
+<button onclick="calcular()">Calcular Cotización</button>
 
-<button onclick="calcular()">Calcular</button>
+<div class="resultado" id="resultado"></div>
 
-<h3 id="resultado"></h3>
+</div>
 
 <script>
 function calcular() {
-  let precio = document.getElementById("paquete").value;
-  let mensual = precio / 12;
+
+  let datos = document.getElementById("servicio").value.split("|");
+
+  let precioFeria = parseFloat(datos[0]);
+  let precioNormal = parseFloat(datos[1]);
+
+  let ahorro = precioNormal - precioFeria;
 
   document.getElementById("resultado").innerHTML =
-    "Total anual: $" + precio +
-    "<br>Mensual: $" + mensual.toFixed(2);
+    "<b>Precio normal:</b> $" + precioNormal +
+    "<br><b>Precio feria:</b> $" + precioFeria +
+    "<br><b>Ahorras:</b> $" + ahorro.toFixed(2) +
+    "<br><br><b>💳 Pago mensual:</b> $" + (precioFeria/12).toFixed(2);
 }
 </script>
 
 </body>
-</html> 
+</html>
