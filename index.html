@@ -40,9 +40,7 @@ body::before{
   padding:16px;
   border-radius:12px;
   box-shadow:0 6px 15px rgba(0,0,0,0.2);
-  transition:.3s;
 }
-.card:hover{transform:translateY(-5px);}
 
 .tag{display:block;font-size:13px;}
 .normal{text-decoration:line-through;color:#aaa;}
@@ -93,9 +91,7 @@ button{flex:1;padding:12px;border:none;border-radius:8px;cursor:pointer;}
 <div class="step active" id="step1">
 <h3 style="color:white">Servicios</h3>
 <div class="grid" id="listaServicios"></div>
-
 <div id="resumenBox" class="resumen"></div>
-
 <button class="next" onclick="validar()">Siguiente</button>
 </div>
 
@@ -138,33 +134,29 @@ button{flex:1;padding:12px;border:none;border-radius:8px;cursor:pointer;}
 </div>
 </div>
 
-<!-- PASO CALENDARIO -->
+<!-- CALENDARIO -->
 <div class="step" id="step3">
-<h3 style="color:white">Fecha de ejecución</h3>
+<h3 style="color:white">Fecha</h3>
 <input type="date" id="fechaServicio">
-
 <div id="estadoFecha" style="color:white"></div>
+
+<div id="resumenBox3" class="resumen"></div>
 
 <div class="botones">
 <button class="back" onclick="next(2)">Atrás</button>
 <button class="next" onclick="guardarFecha()">Confirmar</button>
 </div>
-
-<button onclick="resetearFechas()" style="background:red;color:white;margin-top:10px;">
-🔒 Reset calendario
-</button>
-
-<div id="resumenBox3" class="resumen"></div>
 </div>
 
-<!-- PASO DATOS -->
+<!-- DATOS -->
 <div class="step" id="step4">
 <h3 style="color:white">Datos</h3>
 
 <input id="razon" placeholder="Razón Social *">
 <input id="ruc" placeholder="RUC *">
-<input id="contacto" placeholder="Contacto *">
+<input id="contacto" placeholder="Persona de contacto *">
 <input id="telefono" placeholder="Teléfono *">
+<input id="correo" placeholder="Correo electrónico *">
 
 <div id="resumenBox4" class="resumen"></div>
 
@@ -185,6 +177,7 @@ button{flex:1;padding:12px;border:none;border-radius:8px;cursor:pointer;}
 
 <script>
 
+/* SERVICIOS (SIN CAMBIOS) */
 const servicios = [
 ["PRUEBAS DE HERMETICIDAD EN TANQUES",102,120,150],
 ["PRUEBAS DE HERMETICIDAD EN LÍNEAS",63.75,75,90],
@@ -231,28 +224,41 @@ return 140;
 
 let fechaSeleccionada="";
 
-/* RESUMEN GLOBAL */
+/* RESUMEN */
 function actualizarResumen(){
-let total=0, lista=[];
+
+let normal=0, masgas=0, feria=0, lista=[];
 
 document.querySelectorAll("input:checked").forEach(c=>{
-total+=parseFloat(c.value);
+let p=c.parentElement.querySelectorAll(".tag");
+normal+=parseFloat(p[0].innerText.replace(/[^0-9.]/g,""));
+masgas+=parseFloat(p[1].innerText.replace(/[^0-9.]/g,""));
+feria+=parseFloat(p[2].innerText.replace(/[^0-9.]/g,""));
 lista.push("• "+c.parentElement.querySelector("b").innerText);
 });
 
 let u=ubicacion.value;
 let log=u ? calcularLogistica(u) : 0;
 
-let resumen=`
+normal+=log; masgas+=log; feria+=log;
+
+let html=`
 <h4>Resumen</h4>
+
 ${lista.join("<br>") || "—"}<br><br>
+
 Ubicación: ${u || "-"}<br>
 Logística: $${log}<br>
 Fecha: ${fechaSeleccionada || "-"}<br><br>
-<b>Total: $${(total+log).toFixed(2)}</b>
+
+<b>Total normal:</b> $${normal.toFixed(2)}<br>
+<b>Total MasGas:</b> $${masgas.toFixed(2)}<br>
+<b style="color:#f97316;">Total feria:</b> $${feria.toFixed(2)}<br><br>
+
+<b style="color:#16a34a;">Ahorro:</b> $${(normal-feria).toFixed(2)}
 `;
 
-document.querySelectorAll(".resumen").forEach(r=>r.innerHTML=resumen);
+document.querySelectorAll(".resumen").forEach(r=>r.innerHTML=html);
 }
 
 /* CALENDARIO */
@@ -273,14 +279,6 @@ actualizarResumen();
 next(4);
 }
 
-function resetearFechas(){
-let c=prompt("Clave:");
-if(c==="petrocheck123"){
-localStorage.removeItem("fechas");
-alert("Reset OK");
-}
-}
-
 /* VALIDACIONES */
 function validar(){
 if(!document.querySelector("input:checked")){
@@ -290,26 +288,50 @@ next(2);
 }
 
 function validarDatos(){
-if(!razon.value || !ruc.value || !contacto.value || !telefono.value){
-alert("Completa datos"); return;
+if(!razon.value || !ruc.value || !contacto.value || !telefono.value || !correo.value){
+alert("Completa todos los datos"); return;
 }
 next(5);
 actualizarResumen();
 }
 
-/* NAVEGACION */
+/* NAV */
 function next(n){
 document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
 document.getElementById("step"+n).classList.add("active");
 }
 
-/* PDF */
+/* PDF PRO */
 function generarPDF(){
 const { jsPDF } = window.jspdf;
 const doc=new jsPDF();
 
+doc.setFontSize(14);
 doc.text("COTIZACIÓN PETROCHECK",10,10);
-doc.text(document.getElementById("resumenFinal").innerText,10,20);
+
+doc.setFontSize(10);
+doc.text("Cliente: "+razon.value,10,20);
+doc.text("RUC: "+ruc.value,10,26);
+doc.text("Contacto: "+contacto.value,10,32);
+doc.text("Teléfono: "+telefono.value,10,38);
+doc.text("Correo: "+correo.value,10,44);
+doc.text("Ubicación: "+ubicacion.value,10,50);
+doc.text("Fecha: "+fechaSeleccionada,10,56);
+
+let y=65;
+doc.text("SERVICIOS:",10,y);
+y+=5;
+
+document.querySelectorAll("input:checked").forEach(c=>{
+doc.text("- "+c.parentElement.querySelector("b").innerText,10,y);
+y+=5;
+});
+
+y+=5;
+doc.text("RESUMEN:",10,y);
+y+=5;
+
+doc.text(document.getElementById("resumenFinal").innerText,10,y);
 
 doc.save("cotizacion.pdf");
 }
@@ -320,10 +342,6 @@ let txt=document.getElementById("resumenFinal").innerText;
 window.open("https://wa.me/593999300398?text="+encodeURIComponent(txt));
 }
 
-</script>
-
-</body>
-</html>
 </script>
 
 </body>
