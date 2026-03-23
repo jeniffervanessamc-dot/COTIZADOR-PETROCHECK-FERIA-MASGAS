@@ -177,6 +177,7 @@ button{flex:1;padding:12px;border:none;border-radius:8px;cursor:pointer;}
 
 <script>
 
+/* SERVICIOS */
 const servicios = [
 ["PRUEBAS DE HERMETICIDAD EN TANQUES",102,120,150],
 ["PRUEBAS DE HERMETICIDAD EN LÍNEAS",63.75,75,90],
@@ -206,12 +207,14 @@ cont.innerHTML+=`
 </div>`;
 });
 
+/* TOTAL */
 function total(){
 let t=0;
 document.querySelectorAll("input:checked").forEach(c=>t+=parseFloat(c.value));
 document.getElementById("total").innerText=t.toFixed(2);
 }
 
+/* LOGISTICA */
 function calcularLogistica(u){
 u=u.toLowerCase();
 if(u.includes("quito")) return 131;
@@ -221,6 +224,7 @@ return 140;
 
 let fechaSeleccionada="";
 
+/* RESUMEN */
 function actualizarResumen(){
 
 let normal=0, masgas=0, feria=0, lista=[];
@@ -262,6 +266,7 @@ El costo logístico indicado corresponde a una tarifa por día de ejecución del
 document.querySelectorAll(".resumen").forEach(r=>r.innerHTML=html);
 }
 
+/* CALENDARIO */
 function guardarFecha(){
 let f=fechaServicio.value;
 let fechas=JSON.parse(localStorage.getItem("fechas")||"[]");
@@ -279,6 +284,7 @@ actualizarResumen();
 next(4);
 }
 
+/* VALIDACIONES */
 function validar(){
 if(!document.querySelector("input:checked")){
 alert("Selecciona servicio"); return;
@@ -294,11 +300,13 @@ next(5);
 actualizarResumen();
 }
 
+/* NAV */
 function next(n){
 document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
 document.getElementById("step"+n).classList.add("active");
 }
 
+/* PDF */
 function generarPDF(){
 const { jsPDF } = window.jspdf;
 const doc=new jsPDF();
@@ -311,9 +319,24 @@ doc.text(lineas,10,20);
 doc.save("cotizacion.pdf");
 }
 
+/* WHATSAPP CON DATOS */
 function enviarWhatsApp(){
-let txt=document.getElementById("resumenFinal").innerText;
-window.open("https://wa.me/593999300398?text="+encodeURIComponent(txt));
+
+let datosCliente = `
+DATOS DEL CLIENTE
+Razón Social: ${razon.value}
+RUC: ${ruc.value}
+Persona de contacto: ${contacto.value}
+Teléfono: ${telefono.value}
+Correo: ${correo.value}
+
+`;
+
+let resumen = document.getElementById("resumenFinal").innerText;
+
+let mensaje = datosCliente + "\n" + resumen;
+
+window.open("https://wa.me/593999300398?text="+encodeURIComponent(mensaje));
 }
 
 </script>
