@@ -42,6 +42,31 @@ body::before{
   box-shadow:0 6px 15px rgba(0,0,0,0.2);
 }
 
+/* CANTIDAD BONITA */
+.cantidad-box{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  margin-top:8px;
+}
+.cantidad-box button{
+  width:30px;
+  height:30px;
+  border:none;
+  border-radius:6px;
+  background:#f97316;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+.cantidad-box input{
+  width:50px;
+  text-align:center;
+  border:1px solid #ccc;
+  border-radius:6px;
+}
+
 .tag{display:block;font-size:13px;}
 .normal{text-decoration:line-through;color:#aaa;}
 .masgas{color:#555;}
@@ -201,13 +226,32 @@ cont.innerHTML+=`
 <div class="card">
 <input type="checkbox" id="check${i}" onchange="total(); actualizarResumen();">
 <b>${s[0]}</b>
-<input type="number" id="cant${i}" min="1" value="1" oninput="total(); actualizarResumen();">
+
+<div class="cantidad-box">
+<button onclick="cambiarCantidad(${i}, -1)">-</button>
+<input type="number" id="cant${i}" value="1" min="1"
+oninput="total(); actualizarResumen();">
+<button onclick="cambiarCantidad(${i}, 1)">+</button>
+</div>
+
 <span class="tag normal">Normal: $${s[3]}</span>
 <span class="tag masgas">MasGas: $${s[2]}</span>
 <span class="tag feria">Feria: $${s[1]}</span>
 </div>`;
 });
 
+/* CAMBIAR CANTIDAD */
+function cambiarCantidad(i, cambio){
+let input = document.getElementById("cant"+i);
+let valor = parseInt(input.value) || 1;
+valor += cambio;
+if(valor < 1) valor = 1;
+input.value = valor;
+total();
+actualizarResumen();
+}
+
+/* TOTAL */
 function total(){
 let t=0;
 servicios.forEach((s,i)=>{
@@ -218,6 +262,8 @@ if(check.checked) t += s[1]*cant;
 document.getElementById("total").innerText=t.toFixed(2);
 }
 
+/* LOGICA RESTANTE (igual que antes) */
+
 function calcularLogistica(u){
 u=u.toLowerCase();
 if(u.includes("quito")) return 131;
@@ -227,6 +273,7 @@ return 140;
 
 let fechaSeleccionada="";
 
+/* RESUMEN */
 function actualizarResumen(){
 
 let normal=0, masgas=0, feria=0, lista=[];
@@ -272,6 +319,7 @@ El costo logístico indicado corresponde a una tarifa por día de ejecución del
 document.querySelectorAll(".resumen").forEach(r=>r.innerHTML=html);
 }
 
+/* RESTO FUNCIONES IGUAL */
 function guardarFecha(){
 let f=fechaServicio.value;
 let fechas=JSON.parse(localStorage.getItem("fechas")||"[]");
@@ -327,6 +375,11 @@ let resumen=document.getElementById("resumenFinal").innerText;
 let mensaje=datosCliente+"\n"+resumen;
 window.open("https://wa.me/593999300398?text="+encodeURIComponent(mensaje));
 }
+
+</script>
+
+</body>
+</html>
 
 </script>
 
