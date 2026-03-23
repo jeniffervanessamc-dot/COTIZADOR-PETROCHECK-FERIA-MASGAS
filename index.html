@@ -7,11 +7,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-:root{
-  --accent:#f97316;
-}
+:root{ --accent:#f97316; }
 
-/* FONDO */
 body{
   margin:0;
   font-family:'Segoe UI';
@@ -26,7 +23,6 @@ body::before{
 }
 
 .container{max-width:1100px;margin:auto;padding:25px;}
-
 .header{text-align:center;margin-bottom:20px;}
 .header img{height:70px;}
 
@@ -39,7 +35,6 @@ body::before{
   gap:15px;
 }
 
-/* TARJETAS */
 .card{
   background:white;
   padding:16px;
@@ -52,12 +47,7 @@ body::before{
 .tag{display:block;font-size:13px;}
 .normal{text-decoration:line-through;color:#aaa;}
 .masgas{color:#555;}
-.feria{
-  background:#f97316;
-  color:white;
-  padding:3px;
-  border-radius:5px;
-}
+.feria{background:#f97316;color:white;padding:3px;border-radius:5px;}
 
 input{
   width:100%;
@@ -67,13 +57,7 @@ input{
 }
 
 .botones{display:flex;gap:10px;margin-top:15px;}
-button{
-  flex:1;
-  padding:12px;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-}
+button{flex:1;padding:12px;border:none;border-radius:8px;cursor:pointer;}
 .next{background:#f97316;color:white;}
 .back{background:#ccc;}
 
@@ -84,6 +68,13 @@ button{
   background:white;
   padding:10px;
   border-radius:10px;
+}
+
+.resumen{
+  background:white;
+  padding:15px;
+  border-radius:10px;
+  margin-top:20px;
 }
 </style>
 </head>
@@ -102,13 +93,16 @@ button{
 <div class="step active" id="step1">
 <h3 style="color:white">Servicios</h3>
 <div class="grid" id="listaServicios"></div>
+
+<div id="resumenBox" class="resumen"></div>
+
 <button class="next" onclick="validar()">Siguiente</button>
 </div>
 
 <!-- PASO 2 -->
 <div class="step" id="step2">
 <h3 style="color:white">Ubicación</h3>
-<input id="ubicacion" list="ciudades">
+<input id="ubicacion" list="ciudades" oninput="actualizarResumen()">
 
 <datalist id="ciudades">
 <option value="MEJIA"><option value="CAYAMBE"><option value="QUITO">
@@ -136,6 +130,8 @@ button{
 <option value="PUYO"><option value="LORETO"><option value="JOYA DE LOS SACHAS">
 </datalist>
 
+<div id="resumenBox2" class="resumen"></div>
+
 <div class="botones">
 <button class="back" onclick="next(1)">Atrás</button>
 <button class="next" onclick="next(3)">Siguiente</button>
@@ -146,26 +142,31 @@ button{
 <div class="step" id="step3">
 <h3 style="color:white">Fecha de ejecución</h3>
 <input type="date" id="fechaServicio">
+
 <div id="estadoFecha" style="color:white"></div>
 
 <div class="botones">
 <button class="back" onclick="next(2)">Atrás</button>
-<button class="next" onclick="guardarFecha()">Confirmar fecha</button>
+<button class="next" onclick="guardarFecha()">Confirmar</button>
 </div>
 
 <button onclick="resetearFechas()" style="background:red;color:white;margin-top:10px;">
 🔒 Reset calendario
 </button>
+
+<div id="resumenBox3" class="resumen"></div>
 </div>
 
 <!-- PASO DATOS -->
 <div class="step" id="step4">
-<h3 style="color:white">Datos del cliente</h3>
+<h3 style="color:white">Datos</h3>
 
 <input id="razon" placeholder="Razón Social *">
 <input id="ruc" placeholder="RUC *">
 <input id="contacto" placeholder="Contacto *">
 <input id="telefono" placeholder="Teléfono *">
+
+<div id="resumenBox4" class="resumen"></div>
 
 <div class="botones">
 <button class="back" onclick="next(3)">Atrás</button>
@@ -175,6 +176,7 @@ button{
 
 <!-- FINAL -->
 <div class="step" id="step5">
+<div id="resumenFinal" class="resumen"></div>
 <button onclick="generarPDF()">📄 PDF</button>
 <button onclick="enviarWhatsApp()">📲 WhatsApp</button>
 </div>
@@ -183,7 +185,6 @@ button{
 
 <script>
 
-/* SERVICIOS COMPLETOS */
 const servicios = [
 ["PRUEBAS DE HERMETICIDAD EN TANQUES",102,120,150],
 ["PRUEBAS DE HERMETICIDAD EN LÍNEAS",63.75,75,90],
@@ -205,7 +206,7 @@ const cont=document.getElementById("listaServicios");
 servicios.forEach(s=>{
 cont.innerHTML+=`
 <div class="card">
-<input type="checkbox" value="${s[1]}" onchange="total()">
+<input type="checkbox" value="${s[1]}" onchange="total(); actualizarResumen();">
 <b>${s[0]}</b>
 <span class="tag normal">Normal: $${s[3]}</span>
 <span class="tag masgas">MasGas: $${s[2]}</span>
@@ -220,26 +221,43 @@ document.querySelectorAll("input:checked").forEach(c=>t+=parseFloat(c.value));
 document.getElementById("total").innerText=t.toFixed(2);
 }
 
-/* NAVEGACIÓN */
-function next(n){
-document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
-document.getElementById("step"+n).classList.add("active");
+/* LOGISTICA */
+function calcularLogistica(u){
+u=u.toLowerCase();
+if(u.includes("quito")) return 131;
+if(u.includes("guayaquil")) return 147;
+return 140;
 }
 
-/* VALIDAR */
-function validar(){
-if(!document.querySelector("input:checked")){
-alert("Selecciona un servicio"); return;
-}
-next(2);
+let fechaSeleccionada="";
+
+/* RESUMEN GLOBAL */
+function actualizarResumen(){
+let total=0, lista=[];
+
+document.querySelectorAll("input:checked").forEach(c=>{
+total+=parseFloat(c.value);
+lista.push("• "+c.parentElement.querySelector("b").innerText);
+});
+
+let u=ubicacion.value;
+let log=u ? calcularLogistica(u) : 0;
+
+let resumen=`
+<h4>Resumen</h4>
+${lista.join("<br>") || "—"}<br><br>
+Ubicación: ${u || "-"}<br>
+Logística: $${log}<br>
+Fecha: ${fechaSeleccionada || "-"}<br><br>
+<b>Total: $${(total+log).toFixed(2)}</b>
+`;
+
+document.querySelectorAll(".resumen").forEach(r=>r.innerHTML=resumen);
 }
 
 /* CALENDARIO */
-let fechaSeleccionada="";
-
 function guardarFecha(){
 let f=fechaServicio.value;
-
 let fechas=JSON.parse(localStorage.getItem("fechas")||"[]");
 
 if(fechas.includes(f)){
@@ -251,6 +269,7 @@ fechas.push(f);
 localStorage.setItem("fechas",JSON.stringify(fechas));
 
 fechaSeleccionada=f;
+actualizarResumen();
 next(4);
 }
 
@@ -262,13 +281,26 @@ alert("Reset OK");
 }
 }
 
-/* VALIDAR DATOS */
+/* VALIDACIONES */
+function validar(){
+if(!document.querySelector("input:checked")){
+alert("Selecciona servicio"); return;
+}
+next(2);
+}
+
 function validarDatos(){
 if(!razon.value || !ruc.value || !contacto.value || !telefono.value){
-alert("Completa los datos");
-return;
+alert("Completa datos"); return;
 }
 next(5);
+actualizarResumen();
+}
+
+/* NAVEGACION */
+function next(n){
+document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
+document.getElementById("step"+n).classList.add("active");
 }
 
 /* PDF */
@@ -277,32 +309,21 @@ const { jsPDF } = window.jspdf;
 const doc=new jsPDF();
 
 doc.text("COTIZACIÓN PETROCHECK",10,10);
-doc.text("Cliente: "+razon.value,10,20);
-doc.text("RUC: "+ruc.value,10,30);
-doc.text("Ubicación: "+ubicacion.value,10,40);
-doc.text("Fecha: "+fechaSeleccionada,10,50);
-doc.text("TOTAL: $"+total.innerText,10,60);
+doc.text(document.getElementById("resumenFinal").innerText,10,20);
 
 doc.save("cotizacion.pdf");
 }
 
 /* WHATSAPP */
 function enviarWhatsApp(){
-let txt=`COTIZACIÓN PETROCHECK
-
-Cliente: ${razon.value}
-RUC: ${ruc.value}
-Contacto: ${contacto.value}
-Teléfono: ${telefono.value}
-Ubicación: ${ubicacion.value}
-Fecha: ${fechaSeleccionada}
-
-TOTAL: $${document.getElementById("total").innerText}
-`;
-
+let txt=document.getElementById("resumenFinal").innerText;
 window.open("https://wa.me/593999300398?text="+encodeURIComponent(txt));
 }
 
+</script>
+
+</body>
+</html>
 </script>
 
 </body>
