@@ -1,208 +1,305 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Cotizador Petrocheck</title>
+<title>Cotizador Petrocheck PRO</title>
 
-<script src="https://petrocheck.com.ec/wp-content/uploads/2021/09/logo_oscuro.png"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 :root{
-  --primary:#1a1a1a;
   --accent:#f97316;
-  --bg:#f8fafc;
-  --card:#ffffff;
-  --text:#333;
 }
-body{margin:0;font-family:'Segoe UI';background:var(--bg);}
-.container{max-width:1000px;margin:auto;padding:25px;}
-.step{display:none;} .active{display:block;}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;}
 
-.card{ background:white; padding:14px; border-radius:10px; border:1px solid #e5e7eb; display:flex; flex-direction:column; gap:8px; } .card input[type="checkbox"]{ align-self:center; } .card b{ display:block; margin-top:6px; } .precios{ margin-top:auto; }
-.tag.normal{text-decoration:line-through;color:#9ca3af;}
-.tag.masgas{text-decoration:line-through;color:#6b7280;}
-.tag.feria{background:#f97316;color:white;padding:4px 5px;border-radius:6px;}
+/* FONDO */
+body{
+  margin:0;
+  font-family:'Segoe UI';
+  background:url('https://petrocheck.com.ec/wp-content/uploads/2021/11/calidad-home.jpg') no-repeat center/cover;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.65);
+  z-index:-1;
+}
 
-input{width:100%;padding:10px;margin-top:8px;border-radius:6px;border:1px solid #ccc;}
+.container{max-width:1100px;margin:auto;padding:25px;}
+
+.header{text-align:center;margin-bottom:20px;}
+.header img{height:70px;}
+
+.step{display:none;}
+.active{display:block;}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:15px;
+}
+
+/* TARJETAS */
+.card{
+  background:white;
+  padding:16px;
+  border-radius:12px;
+  box-shadow:0 6px 15px rgba(0,0,0,0.2);
+  transition:.3s;
+}
+.card:hover{transform:translateY(-5px);}
+
+.tag{display:block;font-size:13px;}
+.normal{text-decoration:line-through;color:#aaa;}
+.masgas{color:#555;}
+.feria{
+  background:#f97316;
+  color:white;
+  padding:3px;
+  border-radius:5px;
+}
+
+input{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border-radius:6px;
+}
 
 .botones{display:flex;gap:10px;margin-top:15px;}
-button{flex:1;padding:10px;border:none;border-radius:6px;cursor:pointer;}
+button{
+  flex:1;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
 .next{background:#f97316;color:white;}
-.back{background:#ddd;}
+.back{background:#ccc;}
 
-.total-box{position:fixed;top:15px;right:15px;background:white;padding:10px;border-radius:10px;}
+.total-box{
+  position:fixed;
+  top:15px;
+  right:15px;
+  background:white;
+  padding:10px;
+  border-radius:10px;
+}
 </style>
 </head>
 
 <body>
 
-<div class="total-box">Total: $<span id="total">0.00</span></div>
-
 <div class="container">
+
+<div class="header">
+<img src="https://petrocheck.com.ec/wp-content/uploads/2021/09/logo_oscuro.png">
+</div>
+
+<div class="total-box">Total: $<span id="total">0.00</span></div>
 
 <!-- PASO 1 -->
 <div class="step active" id="step1">
-<h3>Servicios</h3>
+<h3 style="color:white">Servicios</h3>
 <div class="grid" id="listaServicios"></div>
-<div class="botones">
 <button class="next" onclick="validar()">Siguiente</button>
 </div>
-</div>
-
-<!-- RESUMEN -->
-<div id="resumenBox" style="margin-top:20px;background:white;padding:15px;border-radius:10px;border:1px solid #e5e7eb;"></div>
 
 <!-- PASO 2 -->
 <div class="step" id="step2">
-<h3>Ubicación</h3>
+<h3 style="color:white">Ubicación</h3>
+<input id="ubicacion" list="ciudades">
 
-<input id="ubicacion" list="ciudades" placeholder="Ej: Quito">
 <datalist id="ciudades">
-<option value="Quito"><option value="Guayaquil"><option value="Cuenca">
-<option value="Ambato"><option value="Latacunga"><option value="Riobamba">
-<option value="Santo Domingo"><option value="Otavalo"><option value="Loja">
-<option value="Machala"><option value="Puyo"><option value="Lago Agrio">
+<option value="MEJIA"><option value="CAYAMBE"><option value="QUITO">
+<option value="TABACUNDO"><option value="SANTO DOMINGO DE LOS TSACHILAS">
+<option value="OTAVALO"><option value="PEDRO VICENTE MALDONADO">
+<option value="SAN MIGUEL DE URCUQUI"><option value="CHUNCHI">
+<option value="AMBATO"><option value="CUMANDA"><option value="PANGUA">
+<option value="LATACUNGA"><option value="RIOBAMBA"><option value="PUJILI">
+<option value="PELILEO"><option value="BUCAY"><option value="EL CORAZÓN">
+<option value="SANTIAGO DE PILLARO"><option value="SALCEDO">
+<option value="TISALEO"><option value="SIGCHOS"><option value="PENIPE">
+<option value="CEVALLOS"><option value="BAÑOS DE AGUA SANTA">
+<option value="QUERO"><option value="SAQUISILI"><option value="GUARANDA">
+<option value="MOCACHE"><option value="GUAYAQUIL"><option value="BALAO">
+<option value="EL CARMEN"><option value="BABAHOYO"><option value="NOBOL">
+<option value="PORTOVIEJO"><option value="MILAGRO"><option value="JARAMIJO">
+<option value="YAHUACHI"><option value="MONTECRISTI"><option value="PALENQUE">
+<option value="SALITRE"><option value="SANTA LUCIA"><option value="URDANETA">
+<option value="ECHEANDIA"><option value="CHILLANES"><option value="SANTA ISABEL">
+<option value="CALVAS"><option value="CAÑAR"><option value="LOJA">
+<option value="GUALACEO"><option value="PUCARA"><option value="NABON">
+<option value="OÑA"><option value="YACUAMBI"><option value="PAUTE">
+<option value="CATACOCHA"><option value="PASAJE"><option value="PORTOVELO">
+<option value="EL GUABO"><option value="LAGO AGRIO"><option value="SUCUMBIOS">
+<option value="PUYO"><option value="LORETO"><option value="JOYA DE LOS SACHAS">
 </datalist>
 
 <div class="botones">
-<button class="back" onclick="next(1)">Anterior</button>
+<button class="back" onclick="next(1)">Atrás</button>
 <button class="next" onclick="next(3)">Siguiente</button>
 </div>
 </div>
 
-<!-- PASO 3 -->
+<!-- PASO CALENDARIO -->
 <div class="step" id="step3">
-<h3>Datos del cliente</h3>
-
-<input id="razon" placeholder="Razón Social">
-<input id="ruc" placeholder="RUC">
-<input id="contacto" placeholder="Persona de contacto">
-<input id="direccion" placeholder="Dirección">
-<input id="telefono" placeholder="Teléfono">
-<input id="correo" placeholder="Correo">
+<h3 style="color:white">Fecha de ejecución</h3>
+<input type="date" id="fechaServicio">
+<div id="estadoFecha" style="color:white"></div>
 
 <div class="botones">
-<button class="back" onclick="next(2)">Anterior</button>
-<button class="next" onclick="next(4)">Continuar</button>
-</div>
+<button class="back" onclick="next(2)">Atrás</button>
+<button class="next" onclick="guardarFecha()">Confirmar fecha</button>
 </div>
 
-<!-- PASO FINAL -->
+<button onclick="resetearFechas()" style="background:red;color:white;margin-top:10px;">
+🔒 Reset calendario
+</button>
+</div>
+
+<!-- PASO DATOS -->
 <div class="step" id="step4">
-<h3>Finalizar</h3>
+<h3 style="color:white">Datos del cliente</h3>
+
+<input id="razon" placeholder="Razón Social *">
+<input id="ruc" placeholder="RUC *">
+<input id="contacto" placeholder="Contacto *">
+<input id="telefono" placeholder="Teléfono *">
 
 <div class="botones">
-<button onclick="generarPDF()">📄 Descargar PDF</button>
-<button onclick="enviarWhatsApp()">📲 Enviar WhatsApp</button>
+<button class="back" onclick="next(3)">Atrás</button>
+<button class="next" onclick="validarDatos()">Finalizar</button>
 </div>
+</div>
+
+<!-- FINAL -->
+<div class="step" id="step5">
+<button onclick="generarPDF()">📄 PDF</button>
+<button onclick="enviarWhatsApp()">📲 WhatsApp</button>
 </div>
 
 </div>
 
 <script>
 
-// SERVICIOS (NO MODIFICADOS)
+/* SERVICIOS COMPLETOS */
 const servicios = [
-["PRUEBAS DE HERMETICIDAD EN TANQUES",102,120,150], ["PRUEBAS DE HERMETICIDAD EN LÍNEAS",63.75,75,90], ["PARÁMETROS DIMENSIONALES",59.5,70,85], ["INSPECCIÓN TÉCNICA POR MEDICIÓN DE ESPESORES",59.5,70,85], ["LIMPIEZA DE TANQUE CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES (INCLUYE CERTIFICADO DE LIMPIEZA)",382.5,450,460], ["LIMPIEZA DE TANQUE CON CAPACIDAD DE 1 MIL HASTA 4 MIL GALONES (INCLUYE CERTIFICADO DE LIMPIEZA)",297.5,350,380], ["CALIBRACIÓN LIQUIDA TANQUES CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",408,480,500], ["CALIBRACIÓN LIQUIDA TANQUES CON CAPACIDAD DE 1 MIL HASTA 4 MIL GALONES (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",153,180,200], ["CALIBRACIÓN GEOMETRICA TANQUES CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",365.5,430,490], ["CALIBRACIÓN GEOMETRICA TANQUES CON CAPACIDAD DE 1 MIL HASTA 4 MIL HASTA (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",127.5,150,190], ["MEMORIA TÉCNICA",297.5,350,370], ["CERTIFICACIÓN DE SURTIDORES NTE INEN 1781",63.75,75,90], ["CUMPLIMIENTO DE NORMAS DE SEGURIDAD NTE INEN 2251",382.5,450,465] ];
-  const cont=document.getElementById("listaServicios");
+["PRUEBAS DE HERMETICIDAD EN TANQUES",102,120,150],
+["PRUEBAS DE HERMETICIDAD EN LÍNEAS",63.75,75,90],
+["PARÁMETROS DIMENSIONALES",59.5,70,85],
+["INSPECCIÓN TÉCNICA POR MEDICIÓN DE ESPESORES",59.5,70,85],
+["LIMPIEZA DE TANQUE CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES (INCLUYE CERTIFICADO DE LIMPIEZA)",382.5,450,460],
+["LIMPIEZA DE TANQUE CON CAPACIDAD DE 1 MIL HASTA 4 MIL GALONES (INCLUYE CERTIFICADO DE LIMPIEZA)",297.5,350,380],
+["CALIBRACIÓN LIQUIDA TANQUES CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",408,480,500],
+["CALIBRACIÓN LIQUIDA TANQUES CON CAPACIDAD DE 1 MIL HASTA 4 MIL GALONES (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",153,180,200],
+["CALIBRACIÓN GEOMETRICA TANQUES CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",365.5,430,490],
+["CALIBRACIÓN GEOMETRICA TANQUES CON CAPACIDAD DE 1 MIL HASTA 4 MIL HASTA (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",127.5,150,190],
+["MEMORIA TÉCNICA",297.5,350,370],
+["CERTIFICACIÓN DE SURTIDORES NTE INEN 1781",63.75,75,90],
+["CUMPLIMIENTO DE NORMAS DE SEGURIDAD NTE INEN 2251",382.5,450,465]
+];
+
+const cont=document.getElementById("listaServicios");
 
 servicios.forEach(s=>{
 cont.innerHTML+=`
 <div class="card">
-<input type="checkbox" value="${s[1]}" onchange="total(); actualizarResumen();">
+<input type="checkbox" value="${s[1]}" onchange="total()">
 <b>${s[0]}</b>
-<div class="precios">
-<span class="tag normal">Precio normal: $${s[3]}</span><br>
-<span class="tag masgas">Precio cliente MasGas: $${s[2]}</span><br>
-<span class="tag feria">Precio feria: $${s[1]}</span>
-</div>
+<span class="tag normal">Normal: $${s[3]}</span>
+<span class="tag masgas">MasGas: $${s[2]}</span>
+<span class="tag feria">Feria: $${s[1]}</span>
 </div>`;
 });
 
-// TOTAL
+/* TOTAL */
 function total(){
 let t=0;
 document.querySelectorAll("input:checked").forEach(c=>t+=parseFloat(c.value));
 document.getElementById("total").innerText=t.toFixed(2);
 }
 
-// LOGÍSTICA
-function calcularLogistica(u){
-u=u.toLowerCase();
-if(u.includes("quito")) return 131;
-if(u.includes("guayaquil")) return 147;
-return 140;
-}
-
-// RESUMEN
-function actualizarResumen(){
-let normal=0, masgas=0, feria=0, lista=[];
-
-document.querySelectorAll("input:checked").forEach(c=>{
-let p=c.parentElement.querySelectorAll(".tag");
-normal+=parseFloat(p[0].innerText.replace(/[^0-9.]/g,""));
-masgas+=parseFloat(p[1].innerText.replace(/[^0-9.]/g,""));
-feria+=parseFloat(p[2].innerText.replace(/[^0-9.]/g,""));
-lista.push("• "+c.parentElement.querySelector("b").innerText);
-});
-
-let u=document.getElementById("ubicacion").value;
-let log=0;
-
-if(u){
-log=calcularLogistica(u);
-normal+=log; masgas+=log; feria+=log;
-}
-
-document.getElementById("resumenBox").innerHTML=`
-<h4>Resumen</h4>
-
-${lista.join("<br>") || "—"}<br><br>
-
-${u ? `<b>Logística:</b> $${log}<br><small>* Precio por día</small><br><br>`:""}
-
-<b>Total normal:</b> $${normal.toFixed(2)}<br>
-<b>Total MasGas:</b> $${masgas.toFixed(2)}<br>
-<b style="color:#f97316;">Total feria:</b> $${feria.toFixed(2)}<br><br>
-
-<b style="color:#16a34a;">Ahorro:</b> $${(normal-feria).toFixed(2)}<br><br>
-
-<b style="font-size:12px;color:#6b7280;">Validez de la oferta: 10 días</b>
-`;
-}
-
-// NAVEGACIÓN
+/* NAVEGACIÓN */
 function next(n){
 document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
 document.getElementById("step"+n).classList.add("active");
-actualizarResumen();
 }
 
+/* VALIDAR */
 function validar(){
 if(!document.querySelector("input:checked")){
-alert("Selecciona al menos un servicio");return;
+alert("Selecciona un servicio"); return;
 }
 next(2);
 }
 
-// PDF
+/* CALENDARIO */
+let fechaSeleccionada="";
+
+function guardarFecha(){
+let f=fechaServicio.value;
+
+let fechas=JSON.parse(localStorage.getItem("fechas")||"[]");
+
+if(fechas.includes(f)){
+estadoFecha.innerText="❌ Fecha ocupada";
+return;
+}
+
+fechas.push(f);
+localStorage.setItem("fechas",JSON.stringify(fechas));
+
+fechaSeleccionada=f;
+next(4);
+}
+
+function resetearFechas(){
+let c=prompt("Clave:");
+if(c==="petrocheck123"){
+localStorage.removeItem("fechas");
+alert("Reset OK");
+}
+}
+
+/* VALIDAR DATOS */
+function validarDatos(){
+if(!razon.value || !ruc.value || !contacto.value || !telefono.value){
+alert("Completa los datos");
+return;
+}
+next(5);
+}
+
+/* PDF */
 function generarPDF(){
 const { jsPDF } = window.jspdf;
 const doc=new jsPDF();
 
-let txt=document.getElementById("resumenBox").innerText;
-
 doc.text("COTIZACIÓN PETROCHECK",10,10);
-doc.text(txt,10,20);
+doc.text("Cliente: "+razon.value,10,20);
+doc.text("RUC: "+ruc.value,10,30);
+doc.text("Ubicación: "+ubicacion.value,10,40);
+doc.text("Fecha: "+fechaSeleccionada,10,50);
+doc.text("TOTAL: $"+total.innerText,10,60);
 
 doc.save("cotizacion.pdf");
 }
 
-// WHATSAPP
+/* WHATSAPP */
 function enviarWhatsApp(){
-let txt=document.getElementById("resumenBox").innerText;
+let txt=`COTIZACIÓN PETROCHECK
+
+Cliente: ${razon.value}
+RUC: ${ruc.value}
+Contacto: ${contacto.value}
+Teléfono: ${telefono.value}
+Ubicación: ${ubicacion.value}
+Fecha: ${fechaSeleccionada}
+
+TOTAL: $${document.getElementById("total").innerText}
+`;
+
 window.open("https://wa.me/593999300398?text="+encodeURIComponent(txt));
 }
 
@@ -210,4 +307,3 @@ window.open("https://wa.me/593999300398?text="+encodeURIComponent(txt));
 
 </body>
 </html>
-
