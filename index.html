@@ -196,25 +196,28 @@ const servicios = [
 
 const cont=document.getElementById("listaServicios");
 
-servicios.forEach(s=>{
+servicios.forEach((s,i)=>{
 cont.innerHTML+=`
 <div class="card">
-<input type="checkbox" value="${s[1]}" onchange="total(); actualizarResumen();">
+<input type="checkbox" id="check${i}" onchange="total(); actualizarResumen();">
 <b>${s[0]}</b>
+<input type="number" id="cant${i}" min="1" value="1" oninput="total(); actualizarResumen();">
 <span class="tag normal">Normal: $${s[3]}</span>
 <span class="tag masgas">MasGas: $${s[2]}</span>
 <span class="tag feria">Feria: $${s[1]}</span>
 </div>`;
 });
 
-/* TOTAL */
 function total(){
 let t=0;
-document.querySelectorAll("input:checked").forEach(c=>t+=parseFloat(c.value));
+servicios.forEach((s,i)=>{
+let check=document.getElementById("check"+i);
+let cant=parseFloat(document.getElementById("cant"+i).value)||1;
+if(check.checked) t += s[1]*cant;
+});
 document.getElementById("total").innerText=t.toFixed(2);
 }
 
-/* LOGISTICA */
 function calcularLogistica(u){
 u=u.toLowerCase();
 if(u.includes("quito")) return 131;
@@ -224,17 +227,20 @@ return 140;
 
 let fechaSeleccionada="";
 
-/* RESUMEN */
 function actualizarResumen(){
 
 let normal=0, masgas=0, feria=0, lista=[];
 
-document.querySelectorAll("input:checked").forEach(c=>{
-let p=c.parentElement.querySelectorAll(".tag");
-normal+=parseFloat(p[0].innerText.replace(/[^0-9.]/g,""));
-masgas+=parseFloat(p[1].innerText.replace(/[^0-9.]/g,""));
-feria+=parseFloat(p[2].innerText.replace(/[^0-9.]/g,""));
-lista.push("• "+c.parentElement.querySelector("b").innerText);
+servicios.forEach((s,i)=>{
+let check=document.getElementById("check"+i);
+let cant=parseFloat(document.getElementById("cant"+i).value)||1;
+
+if(check.checked){
+normal+=s[3]*cant;
+masgas+=s[2]*cant;
+feria+=s[1]*cant;
+lista.push(`• ${s[0]} (Cantidad: ${cant})`);
+}
 });
 
 let u=ubicacion.value;
@@ -266,62 +272,48 @@ El costo logístico indicado corresponde a una tarifa por día de ejecución del
 document.querySelectorAll(".resumen").forEach(r=>r.innerHTML=html);
 }
 
-/* CALENDARIO */
 function guardarFecha(){
 let f=fechaServicio.value;
 let fechas=JSON.parse(localStorage.getItem("fechas")||"[]");
-
-if(fechas.includes(f)){
-estadoFecha.innerText="❌ Fecha ocupada";
-return;
-}
-
+if(fechas.includes(f)){estadoFecha.innerText="❌ Fecha ocupada";return;}
 fechas.push(f);
 localStorage.setItem("fechas",JSON.stringify(fechas));
-
 fechaSeleccionada=f;
 actualizarResumen();
 next(4);
 }
 
-/* VALIDACIONES */
 function validar(){
-if(!document.querySelector("input:checked")){
-alert("Selecciona servicio"); return;
+if(!document.querySelector("input[type=checkbox]:checked")){
+alert("Selecciona servicio");return;
 }
 next(2);
 }
 
 function validarDatos(){
-if(!razon.value || !ruc.value || !contacto.value || !telefono.value || !correo.value){
-alert("Completa todos los datos"); return;
+if(!razon.value||!ruc.value||!contacto.value||!telefono.value||!correo.value){
+alert("Completa todos los datos");return;
 }
 next(5);
 actualizarResumen();
 }
 
-/* NAV */
 function next(n){
 document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
 document.getElementById("step"+n).classList.add("active");
 }
 
-/* PDF */
 function generarPDF(){
 const { jsPDF } = window.jspdf;
 const doc=new jsPDF();
-
 doc.text("COTIZACIÓN PETROCHECK",10,10);
-let texto = document.getElementById("resumenFinal").innerText;
-let lineas = doc.splitTextToSize(texto,180);
+let texto=document.getElementById("resumenFinal").innerText;
+let lineas=doc.splitTextToSize(texto,180);
 doc.text(lineas,10,20);
-
 doc.save("cotizacion.pdf");
 }
 
-/* WHATSAPP CON DATOS */
 function enviarWhatsApp(){
-
 let datosCliente = `
 DATOS DEL CLIENTE
 Razón Social: ${razon.value}
@@ -331,11 +323,8 @@ Teléfono: ${telefono.value}
 Correo: ${correo.value}
 
 `;
-
-let resumen = document.getElementById("resumenFinal").innerText;
-
-let mensaje = datosCliente + "\n" + resumen;
-
+let resumen=document.getElementById("resumenFinal").innerText;
+let mensaje=datosCliente+"\n"+resumen;
 window.open("https://wa.me/593999300398?text="+encodeURIComponent(mensaje));
 }
 
