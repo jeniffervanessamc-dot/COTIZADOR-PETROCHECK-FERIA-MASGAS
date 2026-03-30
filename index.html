@@ -5,10 +5,9 @@
 <title>Cotizador Petrocheck PRO</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
 <style>
-:root{ --accent:#f97316; }
-
 body{
   margin:0;
   font-family:'Segoe UI';
@@ -26,14 +25,7 @@ body::before{
 .header{text-align:center;margin-bottom:20px;}
 .header img{height:70px;}
 
-.step{display:none;}
-.active{display:block;}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:15px;
-}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:15px;}
 
 .card{
   background:white;
@@ -42,62 +34,27 @@ body::before{
   box-shadow:0 6px 15px rgba(0,0,0,0.2);
 }
 
-/* CANTIDAD BONITA */
 .cantidad-box{
   display:flex;
-  align-items:center;
   justify-content:center;
   gap:5px;
   margin-top:8px;
 }
 .cantidad-box button{
-  width:30px;
-  height:30px;
-  border:none;
-  border-radius:6px;
-  background:#f97316;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
+  width:30px;height:30px;
+  background:#f97316;color:white;border:none;border-radius:6px;
 }
 .cantidad-box input{
-  width:50px;
-  text-align:center;
-  border:1px solid #ccc;
-  border-radius:6px;
-}
-
-.tag{display:block;font-size:13px;}
-.normal{text-decoration:line-through;color:#aaa;}
-.masgas{color:#555;}
-.feria{background:#f97316;color:white;padding:3px;border-radius:5px;}
-
-input{
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-  border-radius:6px;
-}
-
-.botones{display:flex;gap:10px;margin-top:15px;}
-button{flex:1;padding:12px;border:none;border-radius:8px;cursor:pointer;}
-.next{background:#f97316;color:white;}
-.back{background:#ccc;}
-
-.total-box{
-  position:fixed;
-  top:15px;
-  right:15px;
-  background:white;
-  padding:10px;
-  border-radius:10px;
+  width:50px;text-align:center;
 }
 
 .resumen{
-  background:white;
-  padding:15px;
-  border-radius:10px;
-  margin-top:20px;
+  background:white;padding:15px;border-radius:10px;margin-top:20px;
+}
+
+button{
+  padding:12px;border:none;border-radius:8px;
+  background:#f97316;color:white;cursor:pointer;margin-top:10px;
 }
 </style>
 </head>
@@ -107,102 +64,34 @@ button{flex:1;padding:12px;border:none;border-radius:8px;cursor:pointer;}
 <div class="container">
 
 <div class="header">
-<img src="https://drive.google.com/thumbnail?id=1fbGMZqW9tL88TpdNOvxQj6_oNIdnutYu&sz=w1000">
+<img src="https://petrocheck.com.ec/wp-content/uploads/2021/09/logo_oscuro.png">
 </div>
 
-<div class="total-box">Total: $<span id="total">0.00</span></div>
-
-<!-- PASO 1 -->
-<div class="step active" id="step1">
 <h3 style="color:white">Servicios</h3>
 <div class="grid" id="listaServicios"></div>
-<div id="resumenBox" class="resumen"></div>
-<button class="next" onclick="validar()">Siguiente</button>
-</div>
 
-<!-- PASO 2 -->
-<div class="step" id="step2">
 <h3 style="color:white">Ubicación</h3>
-<input id="ubicacion" list="ciudades" oninput="actualizarResumen()">
+<input id="ubicacion" placeholder="Ej: Quito" oninput="actualizarResumen()">
 
-<datalist id="ciudades">
-<option value="MEJIA"><option value="CAYAMBE"><option value="QUITO">
-<option value="TABACUNDO"><option value="SANTO DOMINGO DE LOS TSACHILAS">
-<option value="OTAVALO"><option value="PEDRO VICENTE MALDONADO">
-<option value="SAN MIGUEL DE URCUQUI"><option value="CHUNCHI">
-<option value="AMBATO"><option value="CUMANDA"><option value="PANGUA">
-<option value="LATACUNGA"><option value="RIOBAMBA"><option value="PUJILI">
-<option value="PELILEO"><option value="BUCAY"><option value="EL CORAZÓN">
-<option value="SANTIAGO DE PILLARO"><option value="SALCEDO">
-<option value="TISALEO"><option value="SIGCHOS"><option value="PENIPE">
-<option value="CEVALLOS"><option value="BAÑOS DE AGUA SANTA">
-<option value="QUERO"><option value="SAQUISILI"><option value="GUARANDA">
-<option value="MOCACHE"><option value="GUAYAQUIL"><option value="BALAO">
-<option value="EL CARMEN"><option value="BABAHOYO"><option value="NOBOL">
-<option value="PORTOVIEJO"><option value="MILAGRO"><option value="JARAMIJO">
-<option value="YAHUACHI"><option value="MONTECRISTI"><option value="PALENQUE">
-<option value="SALITRE"><option value="SANTA LUCIA"><option value="URDANETA">
-<option value="ECHEANDIA"><option value="CHILLANES"><option value="SANTA ISABEL">
-<option value="CALVAS"><option value="CAÑAR"><option value="LOJA">
-<option value="GUALACEO"><option value="PUCARA"><option value="NABON">
-<option value="OÑA"><option value="YACUAMBI"><option value="PAUTE">
-<option value="CATACOCHA"><option value="PASAJE"><option value="PORTOVELO">
-<option value="EL GUABO"><option value="LAGO AGRIO"><option value="SUCUMBIOS">
-<option value="PUYO"><option value="LORETO"><option value="JOYA DE LOS SACHAS">
-</datalist>
-
-<div id="resumenBox2" class="resumen"></div>
-
-<div class="botones">
-<button class="back" onclick="next(1)">Atrás</button>
-<button class="next" onclick="next(3)">Siguiente</button>
-</div>
-</div>
-
-<!-- PASO 3 -->
-<div class="step" id="step3">
-<h3 style="color:white">Fecha tentativa para la ejecución del servicio</h3>
-<input type="date" id="fechaServicio">
-<div id="estadoFecha" style="color:white"></div>
-
-<div id="resumenBox3" class="resumen"></div>
-
-<div class="botones">
-<button class="back" onclick="next(2)">Atrás</button>
-<button class="next" onclick="guardarFecha()">Confirmar</button>
-</div>
-</div>
-
-<!-- PASO 4 -->
-<div class="step" id="step4">
 <h3 style="color:white">Datos del cliente</h3>
+<input id="razon" placeholder="Razón Social">
+<input id="ruc" placeholder="RUC">
+<input id="contacto" placeholder="Contacto">
+<input id="telefono" placeholder="Teléfono">
+<input id="correo" placeholder="Correo">
 
-<input id="razon" placeholder="Razón Social *">
-<input id="ruc" placeholder="RUC *">
-<input id="contacto" placeholder="Persona de contacto *">
-<input id="telefono" placeholder="Teléfono *">
-<input id="correo" placeholder="Correo electrónico *">
+<div id="resumen" class="resumen"></div>
 
-<div id="resumenBox4" class="resumen"></div>
-
-<div class="botones">
-<button class="back" onclick="next(3)">Atrás</button>
-<button class="next" onclick="validarDatos()">Finalizar</button>
-</div>
-</div>
-
-<!-- FINAL -->
-<div class="step" id="step5">
-<div id="resumenFinal" class="resumen"></div>
-<button onclick="generarPDF()">📄 PDF</button>
-<button onclick="enviarWhatsApp()">📲 WhatsApp</button>
-</div>
+<button onclick="enviarTodo()">ENVIAR COTIZACIÓN</button>
 
 </div>
 
 <script>
 
-/* SERVICIOS */
+(function(){
+emailjs.init("TU_PUBLIC_KEY");
+})();
+
 const servicios = [
 ["PRUEBAS DE HERMETICIDAD EN TANQUES",102,120,150],
 ["PRUEBAS DE HERMETICIDAD EN LÍNEAS",63.75,75,90],
@@ -224,162 +113,60 @@ const cont=document.getElementById("listaServicios");
 servicios.forEach((s,i)=>{
 cont.innerHTML+=`
 <div class="card">
-<input type="checkbox" id="check${i}" onchange="total(); actualizarResumen();">
+<input type="checkbox" id="check${i}" onchange="actualizarResumen()">
 <b>${s[0]}</b>
 
 <div class="cantidad-box">
-<button onclick="cambiarCantidad(${i}, -1)">-</button>
-<input type="number" id="cant${i}" value="1" min="1"
-oninput="total(); actualizarResumen();">
-<button onclick="cambiarCantidad(${i}, 1)">+</button>
+<button onclick="cambiar(${i},-1)">-</button>
+<input id="cant${i}" value="1">
+<button onclick="cambiar(${i},1)">+</button>
 </div>
 
-<span class="tag normal">Normal: $${s[3]}</span>
-<span class="tag masgas">MasGas: $${s[2]}</span>
-<span class="tag feria">Feria: $${s[1]}</span>
 </div>`;
 });
 
-/* CAMBIAR CANTIDAD */
-function cambiarCantidad(i, cambio){
-let input = document.getElementById("cant"+i);
-let valor = parseInt(input.value) || 1;
-valor += cambio;
-if(valor < 1) valor = 1;
-input.value = valor;
-total();
+function cambiar(i,c){
+let x=document.getElementById("cant"+i);
+let v=parseInt(x.value)||1;
+v+=c;
+if(v<1)v=1;
+x.value=v;
 actualizarResumen();
 }
 
-/* TOTAL */
-function total(){
-let t=0;
-servicios.forEach((s,i)=>{
-let check=document.getElementById("check"+i);
-let cant=parseFloat(document.getElementById("cant"+i).value)||1;
-if(check.checked) t += s[1]*cant;
-});
-document.getElementById("total").innerText=t.toFixed(2);
-}
-
-/* LOGICA RESTANTE (igual que antes) */
-
-function calcularLogistica(u){
-u=u.toLowerCase();
-if(u.includes("quito")) return 131;
-if(u.includes("guayaquil")) return 147;
-return 140;
-}
-
-let fechaSeleccionada="";
-
-/* RESUMEN */
 function actualizarResumen(){
-
-let normal=0, masgas=0, feria=0, lista=[];
+let total=0;
+let lista=[];
 
 servicios.forEach((s,i)=>{
 let check=document.getElementById("check"+i);
-let cant=parseFloat(document.getElementById("cant"+i).value)||1;
+let cant=parseInt(document.getElementById("cant"+i).value)||1;
 
 if(check.checked){
-normal+=s[3]*cant;
-masgas+=s[2]*cant;
-feria+=s[1]*cant;
-lista.push(`• ${s[0]} (Cantidad: ${cant})`);
+total+=s[1]*cant;
+lista.push(`${s[0]} x${cant}`);
 }
 });
 
-let u=ubicacion.value;
-let log=u ? calcularLogistica(u) : 0;
-
-normal+=log; masgas+=log; feria+=log;
-
-let html=`
-<h4>Resumen de Cotización</h4>
-
-${lista.join("<br>") || "—"}<br><br>
-
-<b>Ubicación:</b> ${u || "-"}<br>
-<b>Logística:</b> $${log}<br>
-<b>Fecha tentativa para la ejecución del servicio:</b> ${fechaSeleccionada || "-"}<br><br>
-
-<b>Total normal:</b> $${normal.toFixed(2)}<br>
-<b>Total MasGas:</b> $${masgas.toFixed(2)}<br>
-<b style="color:#f97316;">Total feria:</b> $${feria.toFixed(2)}<br><br>
-
-<b style="color:#16a34a;">Ahorro:</b> $${(normal-feria).toFixed(2)}<br><br>
-
-<b style="font-size:12px;color:#6b7280;">
-La presente oferta tiene una validez de 15 días. Posterior a este plazo, los precios se ajustarán a tarifa MasGas.<br><br>
-El costo logístico indicado corresponde a una tarifa por día de ejecución del servicio.
-</b>
-`;
-
-document.querySelectorAll(".resumen").forEach(r=>r.innerHTML=html);
+document.getElementById("resumen").innerText=
+"Servicios:\n"+lista.join("\n")+
+"\n\nTotal: $"+total;
 }
 
-/* RESTO FUNCIONES IGUAL */
-function guardarFecha(){
-let f=fechaServicio.value;
-let fechas=JSON.parse(localStorage.getItem("fechas")||"[]");
-if(fechas.includes(f)){estadoFecha.innerText="❌ Fecha ocupada";return;}
-fechas.push(f);
-localStorage.setItem("fechas",JSON.stringify(fechas));
-fechaSeleccionada=f;
-actualizarResumen();
-next(4);
-}
+function enviarTodo(){
 
-function validar(){
-if(!document.querySelector("input[type=checkbox]:checked")){
-alert("Selecciona servicio");return;
-}
-next(2);
-}
+let mensaje=document.getElementById("resumen").innerText;
 
-function validarDatos(){
-if(!razon.value||!ruc.value||!contacto.value||!telefono.value||!correo.value){
-alert("Completa todos los datos");return;
+emailjs.send("TU_SERVICE_ID","TU_TEMPLATE_ID",{
+to_email:"contacto@petrocheck.com.ec",
+message:mensaje,
+cliente:razon.value,
+ruc:ruc.value,
+telefono:telefono.value
+});
+
+alert("Cotización enviada al correo");
 }
-next(5);
-actualizarResumen();
-}
-
-function next(n){
-document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
-document.getElementById("step"+n).classList.add("active");
-}
-
-function generarPDF(){
-const { jsPDF } = window.jspdf;
-const doc=new jsPDF();
-doc.text("COTIZACIÓN PETROCHECK",10,10);
-let texto=document.getElementById("resumenFinal").innerText;
-let lineas=doc.splitTextToSize(texto,180);
-doc.text(lineas,10,20);
-doc.save("cotizacion.pdf");
-}
-
-function enviarWhatsApp(){
-let datosCliente = `
-DATOS DEL CLIENTE
-Razón Social: ${razon.value}
-RUC: ${ruc.value}
-Persona de contacto: ${contacto.value}
-Teléfono: ${telefono.value}
-Correo: ${correo.value}
-
-`;
-let resumen=document.getElementById("resumenFinal").innerText;
-let mensaje=datosCliente+"\n"+resumen;
-window.open("https://wa.me/593999300398?text="+encodeURIComponent(mensaje));
-}
-
-</script>
-
-</body>
-</html>
 
 </script>
 
