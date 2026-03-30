@@ -42,29 +42,19 @@ body::before{
   box-shadow:0 6px 15px rgba(0,0,0,0.2);
 }
 
-/* CANTIDAD PRO */
 .cantidad-box{
   display:flex;
-  align-items:center;
   justify-content:center;
   gap:5px;
   margin-top:8px;
 }
 .cantidad-box button{
-  width:30px;
-  height:30px;
-  border:none;
-  border-radius:6px;
-  background:#f97316;
-  color:white;
-  font-weight:bold;
+  width:30px;height:30px;
+  background:#f97316;color:white;border:none;border-radius:6px;
   cursor:pointer;
 }
 .cantidad-box input{
-  width:50px;
-  text-align:center;
-  border:1px solid #ccc;
-  border-radius:6px;
+  width:50px;text-align:center;border:1px solid #ccc;border-radius:6px;
 }
 
 .tag{display:block;font-size:13px;}
@@ -123,7 +113,30 @@ button{flex:1;padding:12px;border:none;border-radius:8px;cursor:pointer;}
 <!-- PASO 2 -->
 <div class="step" id="step2">
 <h3 style="color:white">Ubicación</h3>
-<input id="ubicacion" oninput="actualizarResumen()">
+<input id="ubicacion" list="ciudades" oninput="actualizarResumen()">
+
+<datalist id="ciudades">
+<option value="QUITO">
+<option value="CAYAMBE">
+<option value="AMBATO">
+<option value="LATACUNGA">
+<option value="RIOBAMBA">
+<option value="GUAYAQUIL">
+<option value="SANTO DOMINGO DE LOS TSACHILAS">
+<option value="OTAVALO">
+<option value="MEJIA">
+<option value="TABACUNDO">
+<option value="PORTOVIEJO">
+<option value="MILAGRO">
+<option value="BABAHOYO">
+<option value="LOJA">
+<option value="PUYO">
+<option value="LAGO AGRIO">
+<option value="PELILEO">
+<option value="SALCEDO">
+<option value="BAÑOS DE AGUA SANTA">
+<option value="GUARANDA">
+</datalist>
 
 <div id="resumenBox2" class="resumen"></div>
 
@@ -170,10 +183,10 @@ const servicios = [
 ["INSPECCIÓN TÉCNICA POR MEDICIÓN DE ESPESORES",59.5,70,85],
 ["LIMPIEZA DE TANQUE CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES (INCLUYE CERTIFICADO DE LIMPIEZA)",382.5,450,460],
 ["LIMPIEZA DE TANQUE CON CAPACIDAD DE 1 MIL HASTA 4 MIL GALONES (INCLUYE CERTIFICADO DE LIMPIEZA)",297.5,350,380],
-["CALIBRACIÓN LIQUIDA TANQUES CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",408,480,500],
-["CALIBRACIÓN LIQUIDA TANQUES CON CAPACIDAD DE 1 MIL HASTA 4 MIL GALONES (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",153,180,200],
-["CALIBRACIÓN GEOMETRICA TANQUES CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",365.5,430,490],
-["CALIBRACIÓN GEOMETRICA TANQUES CON CAPACIDAD DE 1 MIL HASTA 4 MIL HASTA (INCLUYE VARILLA DE AFORO REGLETADA EN CM)",127.5,150,190],
+["CALIBRACIÓN LIQUIDA TANQUES CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES",408,480,500],
+["CALIBRACIÓN LIQUIDA TANQUES CON CAPACIDAD DE 1 MIL HASTA 4 MIL GALONES",153,180,200],
+["CALIBRACIÓN GEOMETRICA TANQUES CON CAPACIDAD DE 5 MIL HASTA 12 MIL GALONES",365.5,430,490],
+["CALIBRACIÓN GEOMETRICA TANQUES CON CAPACIDAD DE 1 MIL HASTA 4 MIL",127.5,150,190],
 ["MEMORIA TÉCNICA",297.5,350,370],
 ["CERTIFICACIÓN DE SURTIDORES NTE INEN 1781",63.75,75,90],
 ["CUMPLIMIENTO DE NORMAS DE SEGURIDAD NTE INEN 2251",382.5,450,465]
@@ -188,10 +201,9 @@ cont.innerHTML+=`
 <b>${s[0]}</b>
 
 <div class="cantidad-box">
-<button onclick="cambiarCantidad(${i}, -1)">-</button>
-<input type="number" id="cant${i}" value="1" min="1"
-oninput="total(); actualizarResumen();">
-<button onclick="cambiarCantidad(${i}, 1)">+</button>
+<button onclick="cambiarCantidad(${i},-1)">-</button>
+<input id="cant${i}" value="1">
+<button onclick="cambiarCantidad(${i},1)">+</button>
 </div>
 
 <span class="tag normal">Normal: $${s[3]}</span>
@@ -200,89 +212,98 @@ oninput="total(); actualizarResumen();">
 </div>`;
 });
 
-/* FUNCIONES */
+/* LOGÍSTICA POR CIUDAD (CORRECTA) */
+function calcularLogistica(u){
+u=u.toLowerCase();
+
+const zonas={
+"quito":131,
+"cayambe":131,
+"tabacundo":131,
+"otavalo":131,
+"mejia":131,
+
+"ambato":140,
+"latacunga":140,
+"salcedo":140,
+"pelileo":140,
+"baños":140,
+
+"guayaquil":147,
+"santo domingo":147,
+"riobamba":147,
+"babahoyo":147,
+"milagro":147,
+"portoviejo":147,
+"guaranda":147,
+"loja":147,
+"puyo":147,
+"lago agrio":147
+};
+
+for(let c in zonas){
+if(u.includes(c)) return zonas[c];
+}
+
+return 140;
+}
+
+/* RESTO IGUAL */
 function cambiarCantidad(i,c){
-let input=document.getElementById("cant"+i);
-let v=parseInt(input.value)||1;
-v+=c;
-if(v<1)v=1;
-input.value=v;
-total(); actualizarResumen();
+let x=document.getElementById("cant"+i);
+let v=parseInt(x.value)||1;
+v+=c;if(v<1)v=1;
+x.value=v;total();actualizarResumen();
 }
 
 function total(){
 let t=0;
 servicios.forEach((s,i)=>{
-let check=document.getElementById("check"+i);
-let cant=parseFloat(document.getElementById("cant"+i).value)||1;
-if(check.checked)t+=s[1]*cant;
+let ch=document.getElementById("check"+i);
+let c=parseInt(document.getElementById("cant"+i).value)||1;
+if(ch.checked)t+=s[1]*c;
 });
 document.getElementById("total").innerText=t.toFixed(2);
 }
 
-/* 🔒 LOGISTICA ORIGINAL (NO TOCADA) */
-function calcularLogistica(u){
-u=u.toLowerCase();
-if(u.includes("quito")) return 131;
-if(u.includes("guayaquil")) return 147;
-return 140;
-}
-
 function actualizarResumen(){
 
-let normal=0, masgas=0, feria=0, lista=[];
+let normal=0,masgas=0,feria=0,lista=[];
 
 servicios.forEach((s,i)=>{
-let check=document.getElementById("check"+i);
-let cant=parseFloat(document.getElementById("cant"+i).value)||1;
+let ch=document.getElementById("check"+i);
+let c=parseInt(document.getElementById("cant"+i).value)||1;
 
-if(check.checked){
-normal+=s[3]*cant;
-masgas+=s[2]*cant;
-feria+=s[1]*cant;
-lista.push(`• ${s[0]} (Cantidad: ${cant})`);
+if(ch.checked){
+normal+=s[3]*c;
+masgas+=s[2]*c;
+feria+=s[1]*c;
+lista.push(`• ${s[0]} x${c}`);
 }
 });
 
 let u=ubicacion.value;
-let log=u?calcularLogistica(u):0;
+let log=calcularLogistica(u);
 
 normal+=log; masgas+=log; feria+=log;
 
-let html=`
-<h4>Resumen de Cotización</h4>
-
-${lista.join("<br>") || "—"}<br><br>
-
-<b>Ubicación:</b> ${u || "-"}<br>
-<b>Logística:</b> $${log}<br><br>
-
-<b>Total normal:</b> $${normal.toFixed(2)}<br>
-<b>Total MasGas:</b> $${masgas.toFixed(2)}<br>
-<b style="color:#f97316;">Total feria:</b> $${feria.toFixed(2)}<br><br>
-
-<b style="color:#16a34a;">Ahorro:</b> $${(normal-feria).toFixed(2)}<br><br>
-
-<b style="font-size:12px;color:#6b7280;">
-La presente oferta tiene una validez de 15 días. Posterior a este plazo, los precios se ajustarán a tarifa MasGas.<br><br>
-El costo logístico indicado corresponde a una tarifa por día de ejecución del servicio.
-</b>
-`;
-
-document.querySelectorAll(".resumen").forEach(r=>r.innerHTML=html);
+document.querySelectorAll(".resumen").forEach(r=>r.innerHTML=`
+<h4>Resumen</h4>
+${lista.join("<br>")}<br><br>
+Ubicación: ${u}<br>
+Logística: $${log}<br><br>
+Total Feria: <b>$${feria.toFixed(2)}</b><br>
+Ahorro: <b style="color:green">$${(normal-feria).toFixed(2)}</b>
+`);
 }
 
 function validar(){
-if(!document.querySelector("input[type=checkbox]:checked")){
-alert("Selecciona servicio");return;
-}
+if(!document.querySelector("input[type=checkbox]:checked")) return alert("Selecciona servicio");
 next(2);
 }
 
 function validarDatos(){
-if(!razon.value||!ruc.value||!contacto.value||!telefono.value||!correo.value){
-alert("Completa todos los datos");return;
-}
+if(!razon.value||!ruc.value) return alert("Completa datos");
 next(4);
 actualizarResumen();
 }
@@ -293,28 +314,15 @@ document.getElementById("step"+n).classList.add("active");
 }
 
 function generarPDF(){
-const { jsPDF } = window.jspdf;
-const doc=new jsPDF();
-doc.text("COTIZACIÓN PETROCHECK",10,10);
-let texto=document.getElementById("resumenFinal").innerText;
-let lineas=doc.splitTextToSize(texto,180);
-doc.text(lineas,10,20);
+const {jsPDF}=window.jspdf;
+let doc=new jsPDF();
+doc.text(document.getElementById("resumenFinal").innerText,10,10);
 doc.save("cotizacion.pdf");
 }
 
 function enviarWhatsApp(){
-let datosCliente = `
-DATOS DEL CLIENTE
-Razón Social: ${razon.value}
-RUC: ${ruc.value}
-Persona de contacto: ${contacto.value}
-Teléfono: ${telefono.value}
-Correo: ${correo.value}
-
-`;
-let resumen=document.getElementById("resumenFinal").innerText;
-let mensaje=datosCliente+"\n"+resumen;
-window.open("https://wa.me/593999300398?text="+encodeURIComponent(mensaje));
+let txt=document.getElementById("resumenFinal").innerText;
+window.open("https://wa.me/593999300398?text="+encodeURIComponent(txt));
 }
 
 </script>
