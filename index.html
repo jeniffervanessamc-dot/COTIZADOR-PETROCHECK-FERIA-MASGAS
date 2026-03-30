@@ -42,7 +42,7 @@ body::before{
   box-shadow:0 6px 15px rgba(0,0,0,0.2);
 }
 
-/* CANTIDAD */
+/* CANTIDAD PRO */
 .cantidad-box{
   display:flex;
   align-items:center;
@@ -133,7 +133,7 @@ button{flex:1;padding:12px;border:none;border-radius:8px;cursor:pointer;}
 </div>
 </div>
 
-<!-- PASO 3 (ANTES ERA FECHA → AHORA DATOS) -->
+<!-- PASO 3 -->
 <div class="step" id="step3">
 <h3 style="color:white">Datos del cliente</h3>
 
@@ -220,6 +220,7 @@ if(check.checked)t+=s[1]*cant;
 document.getElementById("total").innerText=t.toFixed(2);
 }
 
+/* 🔒 LOGISTICA ORIGINAL (NO TOCADA) */
 function calcularLogistica(u){
 u=u.toLowerCase();
 if(u.includes("quito")) return 131;
